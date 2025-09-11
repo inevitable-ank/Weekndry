@@ -75,7 +75,7 @@ export const DayViewPage: React.FC = () => {
   };
 
   return (
-    <section className="max-w-6xl mx-auto pt-10 pb-24 space-y-8">
+    <section className="pt-10 pb-24 space-y-8">
       <div className="text-center">
         <h2 className="text-3xl font-bold text-gray-800">Weekend Timeline (Saturday & Sunday)</h2>
         <p className="text-gray-600">A clean, hour‑by‑hour plan for both days.</p>

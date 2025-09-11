@@ -9,6 +9,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   iconPosition?: 'left' | 'right';
   variant?: 'default' | 'filled' | 'outlined';
   size?: 'sm' | 'md' | 'lg';
+  noFocusScale?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({
@@ -20,6 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
   variant = 'default',
   size = 'md',
   className = '',
+  noFocusScale = false,
   ...props
 }, ref) => {
   const baseClasses = "w-full rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2";
@@ -57,7 +59,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
         <motion.input
           ref={ref}
           className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${errorClasses} ${iconClasses} ${className}`}
-          whileFocus={{ scale: 1.02 }}
+          whileFocus={noFocusScale ? {} : { scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
           {...props}
         />

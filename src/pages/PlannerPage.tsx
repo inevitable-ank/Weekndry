@@ -18,15 +18,15 @@ export const PlannerPage: React.FC = () => {
   return (
     <>
       {/* Hero */}
-      <section className="max-w-6xl mx-auto text-center pt-12 pb-8">
+      <section className="text-center pt-12 pb-8">
         <h2 className="text-4xl md:text-5xl font-bold weekendly-text mb-3">Plan your perfect weekend</h2>
         <p className="text-gray-600">Browse activities, build your schedule, set your vibe, and share it.</p>
       </section>
 
-      <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-8" />
+      <div className="h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-8" />
 
       {/* Activity Section */}
-      <section className="max-w-6xl mx-auto">
+      <section>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-2xl font-bold text-gray-800">Activities</h3>
           <Button variant="secondary" onClick={() => setIsModalOpen(true)} icon="➕">
@@ -39,10 +39,10 @@ export const PlannerPage: React.FC = () => {
         />
       </section>
 
-      <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-12" />
+      <div className="h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-12" />
 
       {/* Schedule Section */}
-      <section className="max-w-6xl mx-auto space-y-8">
+      <section className="space-y-8">
         <div className="flex items-center justify-between">
           <h3 className="text-2xl font-bold text-gray-800">Weekend Schedule</h3>
           <div className="flex gap-2">
@@ -72,7 +72,7 @@ export const PlannerPage: React.FC = () => {
         <ScheduleTimeline />
       </section>
 
-      <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-12" />
+      <div className="h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-12" />
 
       {/* Share & Export moved to dedicated Schedule page; use Share button above for modal */}
 

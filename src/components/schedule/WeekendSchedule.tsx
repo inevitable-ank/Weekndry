@@ -1,17 +1,20 @@
 import React from 'react';
 import type { Day } from '../../types/schedule';
 import { DaySchedule } from './DaySchedule';
+import { Card, CardTitle, CardContent } from '../ui';
 
 const DAYS: Day[] = ['Saturday', 'Sunday'];
 
 export const WeekendSchedule: React.FC = () => {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="space-y-10">
       {DAYS.map(day => (
-        <div key={day}>
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">{day}</h2>
-          <DaySchedule day={day} />
-        </div>
+        <Card key={day} variant="elevated" padding="lg" className="bg-white/90">
+          <CardTitle className="m-0 text-2xl mb-4">{day}</CardTitle>
+          <CardContent>
+            <DaySchedule day={day} />
+          </CardContent>
+        </Card>
       ))}
     </div>
   );

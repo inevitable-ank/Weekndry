@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import type { Day, ScheduledItem, TimeBlock } from '../../types/schedule';
 import { Card, CardTitle } from '../ui';
 import { useSchedule } from '../../store/scheduleStore';
@@ -34,7 +34,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ day, block, items, onRemove 
   return (
     <Card 
       variant="default"
-      className="min-h-[180px] border-dashed border-2 border-transparent hover:border-blue-300 transition-colors"
+      className="min-h-[180px] border-dashed border-2 border-transparent hover:border-blue-300 transition-colors overflow-hidden"
     >
       <CardTitle className="text-sm mb-3 flex items-center justify-between">
         <span>{label}</span>

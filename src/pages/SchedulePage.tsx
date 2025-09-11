@@ -10,7 +10,7 @@ export const SchedulePage: React.FC = () => {
   const exportRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="max-w-6xl mx-auto pt-10 pb-24 space-y-8">
+    <section className="pt-10 pb-24 space-y-8">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold text-gray-800">Your Weekend Schedule</h2>
@@ -22,7 +22,7 @@ export const SchedulePage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
+      <div className="h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
       <div ref={exportRef as any}>
         <ShareCard />

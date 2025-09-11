@@ -26,7 +26,7 @@ export const ScheduleItem: React.FC<ScheduleItemProps> = ({ item, onRemove, onCh
 
   return (
     <div 
-      className="bg-white/80 border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-all"
+      className="bg-white/80 border border-gray-100 rounded-lg p-3 shadow-sm hover:shadow-md transition-all overflow-hidden"
       draggable
       onDragStart={(e) => {
         e.dataTransfer.setData('text/plain', item.id);
@@ -49,6 +49,7 @@ export const ScheduleItem: React.FC<ScheduleItemProps> = ({ item, onRemove, onCh
             value={`${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}`}
             onChange={(e) => onTimeChange(e.target.value)}
             className="w-[110px]"
+            noFocusScale
           />
           <Button size="sm" variant="ghost" onClick={() => setOpenMood((p) => !p)}>Mood</Button>
           <Button size="sm" variant="ghost" onClick={() => onRemove(item.id)}>Remove</Button>
