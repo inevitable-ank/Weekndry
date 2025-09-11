@@ -6,7 +6,7 @@ import { PlannerPage } from './pages/PlannerPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SchedulePage } from './pages/SchedulePage';
-import { DayViewPage } from './pages/DayViewPage';
+// Removed DayViewPage
 
 const router = createBrowserRouter([
   {
@@ -17,10 +17,7 @@ const router = createBrowserRouter([
     path: '/schedule',
     element: <Layout><SchedulePage /></Layout>,
   },
-  {
-    path: '/day/:day',
-    element: <Layout><DayViewPage /></Layout>,
-  },
+  // Removed day view route
   {
     path: '/planner',
     element: <Layout><PlannerPage /></Layout>,
