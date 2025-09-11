@@ -21,6 +21,7 @@ import { ScheduleProvider, useSchedule } from './store/scheduleStore'
 import { Day, TimeBlock } from './types/schedule'
 import { ThemeProvider } from './store/themeStore'
 import { ThemeSelector } from './components/theme/ThemeSelector'
+import { ShareCard } from './components/share/ShareCard'
 
 function Planner() {
   const [count, setCount] = useState(0)
@@ -100,6 +101,12 @@ function Planner() {
           </div>
         </div>
         <WeekendSchedule />
+      </div>
+
+      {/* Share / Export */}
+      <div className="w-full max-w-5xl mt-16">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Share</h2>
+        <ShareCard />
       </div>
 
       {/* Add to schedule modal */}
