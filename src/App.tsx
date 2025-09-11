@@ -10,26 +10,22 @@ import {
   Badge, 
   ActivityBadge, 
   Modal, 
-  ModalHeader, 
-  ModalTitle, 
   ModalContent, 
   ModalFooter,
-  LoadingSpinner,
   Input
 } from './components/ui'
+import { ActivityBrowser } from './components/activity/ActivityBrowser'
+import { ACTIVITIES } from './data/activities'
+import { WeekendSchedule } from './components/schedule/WeekendSchedule'
+import { ScheduleProvider, useSchedule } from './store/scheduleStore'
+import { Day, TimeBlock } from './types/schedule'
 
-function App() {
+function Planner() {
   const [count, setCount] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handlePlanActivity = () => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setCount(count + 1)
-      setIsLoading(false)
-    }, 1000)
-  }
+  const [selectedDay, setSelectedDay] = useState<Day>('Saturday')
+  const [selectedBlock, setSelectedBlock] = useState<TimeBlock>('morning')
+  const { addActivity } = useSchedule()
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8">
@@ -63,98 +59,87 @@ function App() {
         </p>
       </div>
 
-      {/* Main Card with Custom Components */}
-      <Card className="max-w-md w-full text-center" variant="glass">
-        <CardHeader>
-          <CardTitle className="text-4xl font-bold text-gray-800 mb-2">
-            {count}
-          </CardTitle>
-          <p className="text-gray-600">
-            Weekend activities planned
-          </p>
-        </CardHeader>
-        
-        <CardContent className="space-y-4">
-          <div className="flex flex-wrap gap-2 justify-center">
-            <ActivityBadge category="food" />
-            <ActivityBadge category="entertainment" />
-            <ActivityBadge category="outdoor" />
-          </div>
-          
-          <div className="flex space-x-3 justify-center">
-            <Button 
-              onClick={handlePlanActivity}
-              loading={isLoading}
-              icon="✨"
-              size="lg"
-            >
-              Plan Activity
-            </Button>
-            <Button 
-              variant="secondary"
-              onClick={() => setIsModalOpen(true)}
-              icon="⚙️"
-            >
-              Settings
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Features Preview with Custom Cards */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
-        <Card hover className="text-center">
-          <div className="text-3xl mb-3">🎯</div>
-          <CardTitle className="text-lg">Smart Planning</CardTitle>
-          <p className="text-gray-600 text-sm">AI-powered activity suggestions</p>
-        </Card>
-        
-        <Card hover className="text-center">
-          <div className="text-3xl mb-3">🎨</div>
-          <CardTitle className="text-lg">Beautiful Themes</CardTitle>
-          <p className="text-gray-600 text-sm">Customize your weekend vibe</p>
-        </Card>
-        
-        <Card hover className="text-center">
-          <div className="text-3xl mb-3">📱</div>
-          <CardTitle className="text-lg">Share & Export</CardTitle>
-          <p className="text-gray-600 text-sm">Share your perfect weekend</p>
-        </Card>
+      {/* Activity Section */}
+      <div className="w-full max-w-5xl">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-800">Activities</h2>
+          <Button variant="secondary" onClick={() => setIsModalOpen(true)} icon="➕">
+            Add to Schedule
+          </Button>
+        </div>
+        <ActivityBrowser
+          activities={ACTIVITIES}
+          onSelect={() => setIsModalOpen(true)}
+        />
       </div>
 
-      {/* Modal Example */}
+      {/* Schedule Section */}
+      <div className="w-full max-w-5xl mt-16">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold text-gray-800">Weekend Schedule</h2>
+          <div className="flex gap-2">
+            <select
+              className="border rounded-lg px-3 py-2"
+              value={selectedDay}
+              onChange={(e) => setSelectedDay(e.target.value as Day)}
+            >
+              <option>Saturday</option>
+              <option>Sunday</option>
+            </select>
+            <select
+              className="border rounded-lg px-3 py-2"
+              value={selectedBlock}
+              onChange={(e) => setSelectedBlock(e.target.value as TimeBlock)}
+            >
+              <option>morning</option>
+              <option>afternoon</option>
+              <option>evening</option>
+            </select>
+          </div>
+        </div>
+        <WeekendSchedule />
+      </div>
+
+      {/* Add to schedule modal */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
-        title="Weekend Settings"
-        size="md"
+        title="Add Activity to Schedule"
+        size="xl"
       >
         <ModalContent>
           <div className="space-y-4">
-            <Input 
-              label="Weekend Theme"
-              placeholder="Choose your vibe..."
-              icon="🎨"
-            />
-            <Input 
-              label="Preferred Activities"
-              placeholder="What do you love to do?"
-              icon="❤️"
-            />
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="primary" removable>Brunch</Badge>
-              <Badge variant="success" removable>Hiking</Badge>
-              <Badge variant="warning" removable>Movies</Badge>
+            <p className="text-sm text-gray-600">Choose a day and time, then click an activity.</p>
+            <div className="flex gap-2">
+              <select
+                className="border rounded-lg px-3 py-2"
+                value={selectedDay}
+                onChange={(e) => setSelectedDay(e.target.value as Day)}
+              >
+                <option>Saturday</option>
+                <option>Sunday</option>
+              </select>
+              <select
+                className="border rounded-lg px-3 py-2"
+                value={selectedBlock}
+                onChange={(e) => setSelectedBlock(e.target.value as TimeBlock)}
+              >
+                <option>morning</option>
+                <option>afternoon</option>
+                <option>evening</option>
+              </select>
             </div>
+            <ActivityBrowser
+              activities={ACTIVITIES}
+              onSelect={(a) => {
+                addActivity(a, selectedDay, selectedBlock)
+                setIsModalOpen(false)
+              }}
+            />
           </div>
         </ModalContent>
         <ModalFooter>
-          <Button variant="ghost" onClick={() => setIsModalOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={() => setIsModalOpen(false)}>
-            Save Settings
-          </Button>
+          <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Close</Button>
         </ModalFooter>
       </Modal>
 
@@ -168,4 +153,10 @@ function App() {
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <ScheduleProvider>
+      <Planner />
+    </ScheduleProvider>
+  )
+}

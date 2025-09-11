@@ -107,3 +107,4 @@ export const ActivityBadge: React.FC<{ category: string; className?: string }> =
     </Badge>
   );
 };
+
