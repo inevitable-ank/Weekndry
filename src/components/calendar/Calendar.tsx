@@ -202,13 +202,15 @@ export const Calendar: React.FC<CalendarProps> = ({
                 onClick={() => onDateSelect?.(date)}
                 className={`
                   relative p-3 text-sm rounded-xl transition-all duration-300 hover:scale-105
-                  ${isCurrentMonthDay 
-                    ? 'text-gray-800 hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50 hover:text-gray-800 shadow-sm hover:shadow-md' 
-                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-400'
+                  ${isSelectedDate 
+                    ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg' 
+                    : isTodayDate 
+                      ? 'bg-gradient-to-br from-blue-100 to-purple-100 font-semibold hover:from-blue-200 hover:to-purple-200 shadow-md text-gray-800'
+                      : isCurrentMonthDay 
+                        ? 'text-gray-800 hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50 hover:text-gray-800 shadow-sm hover:shadow-md' 
+                        : 'text-gray-400 hover:bg-gray-50 hover:text-gray-400'
                   }
-                  ${isTodayDate ? 'bg-gradient-to-br from-blue-100 to-purple-100 font-semibold hover:from-blue-200 hover:to-purple-200 shadow-md' : ''}
-                  ${isSelectedDate ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg' : ''}
-                  ${holiday ? 'border-l-4 border-l-orange-400 bg-gradient-to-r from-orange-50/50 to-transparent' : ''}
+                  ${holiday && !isSelectedDate ? 'border-l-4 border-l-orange-400 bg-gradient-to-r from-orange-50/50 to-transparent' : ''}
                 `}
               >
                 <div className="flex flex-col items-center">
@@ -237,12 +239,18 @@ export const Calendar: React.FC<CalendarProps> = ({
                     holiday.type === 'religious' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
                     'bg-gradient-to-r from-blue-500 to-cyan-500'
                   }`}>
-                    {new Date(holiday.date).getDate()}
+                    {(() => {
+                      const [year, month, day] = holiday.date.split('-').map(Number);
+                      return day;
+                    })()}
                   </div>
                   <div className="flex-1">
                     <div className="font-medium text-sm text-gray-800">{holiday.name}</div>
                     <div className="text-xs text-gray-500">
-                      {new Date(holiday.date).getDate()} {MONTHS[month]}
+                      {(() => {
+                        const [year, month, day] = holiday.date.split('-').map(Number);
+                        return `${day} ${MONTHS[month - 1]}`;
+                      })()}
                     </div>
                   </div>
                   <Badge 

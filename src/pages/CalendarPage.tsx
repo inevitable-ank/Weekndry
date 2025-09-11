@@ -161,7 +161,11 @@ export const CalendarPage: React.FC = () => {
               </CardTitle>
               <div className="space-y-3">
                 {INDIAN_HOLIDAYS
-                  .filter(holiday => new Date(holiday.date) > new Date())
+                  .filter(holiday => {
+                    const [year, month, day] = holiday.date.split('-').map(Number);
+                    const holidayDate = new Date(year, month - 1, day);
+                    return holidayDate > new Date();
+                  })
                   .slice(0, 5)
                   .map((holiday, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 bg-white/60 rounded-lg hover:bg-white/80 transition-all duration-200">
@@ -170,16 +174,23 @@ export const CalendarPage: React.FC = () => {
                         holiday.type === 'religious' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
                         'bg-gradient-to-r from-blue-500 to-cyan-500'
                       }`}>
-                        {new Date(holiday.date).getDate()}
+                        {(() => {
+                          const [year, month, day] = holiday.date.split('-').map(Number);
+                          return day;
+                        })()}
                       </div>
                       <div className="flex-1">
                         <div className="font-semibold text-sm text-gray-800">{holiday.name}</div>
                         <div className="text-xs text-gray-500">
-                          {new Date(holiday.date).toLocaleDateString('en-IN', { 
-                            month: 'long', 
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
+                          {(() => {
+                            const [year, month, day] = holiday.date.split('-').map(Number);
+                            const date = new Date(year, month - 1, day);
+                            return date.toLocaleDateString('en-IN', { 
+                              month: 'long', 
+                              day: 'numeric',
+                              year: 'numeric'
+                            });
+                          })()}
                         </div>
                       </div>
                       <div className={`px-3 py-1 rounded-full text-xs font-medium ${
