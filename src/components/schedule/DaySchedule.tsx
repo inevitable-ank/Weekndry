@@ -1,5 +1,5 @@
 import React from 'react';
-import { Day, TimeBlock } from '../../types/schedule';
+import type { Day, TimeBlock } from '../../types/schedule';
 import { useSchedule } from '../../store/scheduleStore';
 import { TimeSlot } from './TimeSlot';
 

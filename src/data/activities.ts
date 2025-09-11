@@ -1,4 +1,4 @@
-import { Activity } from '../types';
+import type { Activity } from '../types';
 
 export const ACTIVITIES: Activity[] = [
   { id: 'a1', name: 'Brunch with Friends', category: 'food', icon: '🥞', mood: 'social', energyLevel: 2, durationMinutes: 90 },

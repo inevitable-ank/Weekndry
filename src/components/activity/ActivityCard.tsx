@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity } from '../../types';
+import type { Activity } from '../../types';
 import { Card, CardContent, CardTitle, Badge } from '../ui';
 
 interface ActivityCardProps {

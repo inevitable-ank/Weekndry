@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { Activity } from '../types/activity';
-import { Day, DAYS, ScheduleData, TimeBlock, TIME_BLOCKS, ScheduledItem } from '../types/schedule';
+import React, { createContext, useContext, useEffect, useMemo, useState, createElement } from 'react';
+import type { Activity } from '../types/activity';
+import { DAYS, TIME_BLOCKS } from '../types/schedule';
+import type { Day, ScheduleData, TimeBlock, ScheduledItem } from '../types/schedule';
 import type { ActivityMood } from '../types/activity';
 
 interface ScheduleContextValue {
@@ -49,9 +50,9 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const addActivity = (activity: Activity, day: Day, block: TimeBlock) => {
     setSchedule(prev => {
       const id = `si_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-      const item: ScheduledItem = { id, activity, day, block };
+      const item: ScheduledItem = { id, activity, day, block } as ScheduledItem;
       const next = structuredClone(prev) as ScheduleData;
-      next[day][block] = [...next[day][block], item];
+      (next[day][block] as ScheduledItem[]) = [...next[day][block], item];
       return next;
     });
   };
@@ -59,13 +60,13 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const moveItem = (itemId: string, day: Day, block: TimeBlock) => {
     setSchedule(prev => {
       const next = createInitialSchedule();
-      (DAYS as Day[]).forEach(d => {
-        (TIME_BLOCKS as TimeBlock[]).forEach(b => {
-          prev[d][b].forEach(item => {
+      (['Saturday','Sunday'] as Day[]).forEach(d => {
+        (['morning','afternoon','evening'] as TimeBlock[]).forEach(b => {
+          (prev[d][b] as ScheduledItem[]).forEach(item => {
             if (item.id === itemId) {
-              next[day][block].push({ ...item, day, block });
+              (next[day][block] as ScheduledItem[]).push({ ...item, day, block });
             } else {
-              next[item.day][item.block].push(item);
+              (next[item.day][item.block] as ScheduledItem[]).push(item);
             }
           });
         });
@@ -77,13 +78,13 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const updateItemMood = (itemId: string, mood: ActivityMood) => {
     setSchedule(prev => {
       const next = createInitialSchedule();
-      (DAYS as Day[]).forEach(d => {
-        (TIME_BLOCKS as TimeBlock[]).forEach(b => {
-          prev[d][b].forEach(item => {
+      (['Saturday','Sunday'] as Day[]).forEach(d => {
+        (['morning','afternoon','evening'] as TimeBlock[]).forEach(b => {
+          (prev[d][b] as ScheduledItem[]).forEach(item => {
             if (item.id === itemId) {
-              next[item.day][item.block].push({ ...item, mood });
+              (next[item.day][item.block] as ScheduledItem[]).push({ ...item, mood });
             } else {
-              next[item.day][item.block].push(item);
+              (next[item.day][item.block] as ScheduledItem[]).push(item);
             }
           });
         });
@@ -95,9 +96,9 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const removeItem = (itemId: string) => {
     setSchedule(prev => {
       const next = createInitialSchedule();
-      (DAYS as Day[]).forEach(d => {
-        (TIME_BLOCKS as TimeBlock[]).forEach(b => {
-          next[d][b] = prev[d][b].filter(item => item.id !== itemId);
+      (['Saturday','Sunday'] as Day[]).forEach(d => {
+        (['morning','afternoon','evening'] as TimeBlock[]).forEach(b => {
+          (next[d][b] as ScheduledItem[]) = (prev[d][b] as ScheduledItem[]).filter(item => item.id !== itemId);
         });
       });
       return next;
@@ -108,7 +109,7 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const value = useMemo(() => ({ schedule, addActivity, moveItem, updateItemMood, removeItem, clear }), [schedule]);
 
-  return <ScheduleContext.Provider value={value}>{children}</ScheduleContext.Provider>;
+  return createElement(ScheduleContext.Provider, { value }, children);
 };
 
 export function useSchedule() {

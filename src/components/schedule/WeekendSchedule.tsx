@@ -1,5 +1,5 @@
 import React from 'react';
-import { Day } from '../../types/schedule';
+import type { Day } from '../../types/schedule';
 import { DaySchedule } from './DaySchedule';
 
 const DAYS: Day[] = ['Saturday', 'Sunday'];

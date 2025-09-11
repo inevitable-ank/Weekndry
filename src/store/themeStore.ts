@@ -1,6 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, createElement } from 'react';
 import { THEMES } from '../data/themes';
-import { ThemeConfig, ThemeId } from '../types/theme';
+import type { ThemeConfig, ThemeId } from '../types/theme';
 
 interface ThemeContextValue {
   theme: ThemeConfig;
@@ -29,7 +29,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const setTheme = (id: ThemeId) => setThemeId(id);
 
   const value = useMemo(() => ({ theme, setTheme, themes: THEMES }), [theme]);
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  return createElement(ThemeContext.Provider, { value }, children);
 };
 
 export function useTheme() {

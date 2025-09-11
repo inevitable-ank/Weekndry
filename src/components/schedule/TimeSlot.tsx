@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { Day, ScheduledItem, TimeBlock } from '../../types/schedule';
+import type { Day, ScheduledItem, TimeBlock } from '../../types/schedule';
 import { Card, CardTitle, Button } from '../ui';
 import { useSchedule } from '../../store/scheduleStore';
 import { MoodSelector } from '../mood/MoodSelector';

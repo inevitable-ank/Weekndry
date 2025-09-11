@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Activity, ActivityCategory } from '../../types';
+import type { Activity, ActivityCategory } from '../../types';
 import { Input, Badge } from '../ui';
 import { ActivityCard } from './ActivityCard';
 import { EmptyState } from '../common/EmptyState';

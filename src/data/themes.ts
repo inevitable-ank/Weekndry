@@ -1,4 +1,4 @@
-import { ThemeConfig } from '../types/theme';
+import type { ThemeConfig } from '../types/theme';
 
 export const THEMES: ThemeConfig[] = [
   { id: 'lazy', name: 'Lazy Weekend', bgClass: 'from-purple-200 via-pink-200 to-rose-200', accentClass: 'from-purple-500 to-pink-600', previewEmoji: '🛋️' },

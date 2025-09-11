@@ -1,4 +1,4 @@
-import { Activity } from './activity';
+import type { Activity } from './activity';
 import type { ActivityMood } from './activity';
 
 export type Day = 'Saturday' | 'Sunday';
