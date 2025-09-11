@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Activity, ActivityCategory } from '../../types';
 import { Input, Badge } from '../ui';
 import { ActivityCard } from './ActivityCard';
+import { EmptyState } from '../common/EmptyState';
 
 interface ActivityBrowserProps {
   activities: Activity[];
@@ -32,12 +33,13 @@ export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, on
       <div className="flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
         <Input 
           placeholder="Search activities..."
+          aria-label="Search activities"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           icon="🔎"
           className="md:max-w-sm"
         />
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
           {CATEGORIES.map(cat => (
             <Badge 
               key={cat}
@@ -53,14 +55,19 @@ export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, on
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map(a => (
-          <ActivityCard key={a.id} activity={a} onSelect={onSelect} />
-        ))}
-        {filtered.length === 0 && (
-          <div className="col-span-full text-center text-gray-500 py-12">No activities match your filters.</div>
-        )}
-      </div>
+      {filtered.length === 0 ? (
+        <EmptyState 
+          icon="🔍" 
+          title="No activities found"
+          description="Try a different search or adjust your filters."
+        />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map(a => (
+            <ActivityCard key={a.id} activity={a} onSelect={onSelect} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

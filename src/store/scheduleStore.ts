@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { Activity } from '../types/activity';
 import { Day, DAYS, ScheduleData, TimeBlock, TIME_BLOCKS, ScheduledItem } from '../types/schedule';
+import type { ActivityMood } from '../types/activity';
 
 interface ScheduleContextValue {
   schedule: ScheduleData;
   addActivity: (activity: Activity, day: Day, block: TimeBlock) => void;
   moveItem: (itemId: string, day: Day, block: TimeBlock) => void;
+  updateItemMood: (itemId: string, mood: ActivityMood) => void;
   removeItem: (itemId: string) => void;
   clear: () => void;
 }
@@ -57,12 +59,29 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const moveItem = (itemId: string, day: Day, block: TimeBlock) => {
     setSchedule(prev => {
       const next = createInitialSchedule();
-      // flatten and reassign
       (DAYS as Day[]).forEach(d => {
         (TIME_BLOCKS as TimeBlock[]).forEach(b => {
           prev[d][b].forEach(item => {
             if (item.id === itemId) {
               next[day][block].push({ ...item, day, block });
+            } else {
+              next[item.day][item.block].push(item);
+            }
+          });
+        });
+      });
+      return next;
+    });
+  };
+
+  const updateItemMood = (itemId: string, mood: ActivityMood) => {
+    setSchedule(prev => {
+      const next = createInitialSchedule();
+      (DAYS as Day[]).forEach(d => {
+        (TIME_BLOCKS as TimeBlock[]).forEach(b => {
+          prev[d][b].forEach(item => {
+            if (item.id === itemId) {
+              next[item.day][item.block].push({ ...item, mood });
             } else {
               next[item.day][item.block].push(item);
             }
@@ -87,7 +106,7 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const clear = () => setSchedule(createInitialSchedule());
 
-  const value = useMemo(() => ({ schedule, addActivity, moveItem, removeItem, clear }), [schedule]);
+  const value = useMemo(() => ({ schedule, addActivity, moveItem, updateItemMood, removeItem, clear }), [schedule]);
 
   return <ScheduleContext.Provider value={value}>{children}</ScheduleContext.Provider>;
 };

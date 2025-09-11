@@ -7,9 +7,14 @@ interface ActivityCardProps {
   onSelect?: (activity: Activity) => void;
 }
 
-export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onSelect }) => {
+const ActivityCardBase: React.FC<ActivityCardProps> = ({ activity, onSelect }) => {
+  const clickable = Boolean(onSelect);
   return (
-    <Card hover className="flex items-center gap-4" onClick={onSelect ? () => onSelect(activity) : undefined}>
+    <Card 
+      hover 
+      className={`flex items-center gap-4 ${clickable ? 'cursor-pointer' : ''}`}
+      onClick={onSelect ? () => onSelect(activity) : undefined}
+    >
       <div className="text-3xl" aria-hidden>
         {activity.icon ?? '⭐'}
       </div>
@@ -25,3 +30,5 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onSelect }
     </Card>
   );
 };
+
+export const ActivityCard = React.memo(ActivityCardBase);

@@ -3,6 +3,8 @@ import { Day, ScheduledItem, TimeBlock } from '../../types/schedule';
 import { Card, CardTitle, Button } from '../ui';
 import { useSchedule } from '../../store/scheduleStore';
 import { MoodSelector } from '../mood/MoodSelector';
+import { EmptyState } from '../common/EmptyState';
+import { useAnnouncer } from '../common/LiveRegion';
 
 interface TimeSlotProps {
   day: Day;
@@ -12,7 +14,8 @@ interface TimeSlotProps {
 }
 
 export const TimeSlot: React.FC<TimeSlotProps> = ({ day, block, items, onRemove }) => {
-  const { moveItem } = useSchedule();
+  const { moveItem, updateItemMood } = useSchedule();
+  const { announce } = useAnnouncer();
   const label = block.charAt(0).toUpperCase() + block.slice(1);
   const [openMoodFor, setOpenMoodFor] = useState<string | null>(null);
 
@@ -23,13 +26,16 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ day, block, items, onRemove 
   const onDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const itemId = e.dataTransfer.getData('text/plain');
-    if (itemId) moveItem(itemId, day, block);
-  }, [block, day, moveItem]);
+    if (itemId) {
+      moveItem(itemId, day, block);
+      announce(`Moved activity to ${day} ${block}`);
+    }
+  }, [announce, block, day, moveItem]);
 
   return (
     <Card 
       variant="default"
-      className="min-h-[160px] border-dashed border-2 border-transparent hover:border-blue-300 transition-colors"
+      className="min-h-[180px] border-dashed border-2 border-transparent hover:border-blue-300 transition-colors"
     >
       <CardTitle className="text-sm mb-3 flex items-center justify-between">
         <span>{label}</span>
@@ -41,7 +47,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ day, block, items, onRemove 
         onDrop={onDrop}
       >
         {items.length === 0 && (
-          <div className="text-gray-400 text-sm">Drag activities here</div>
+          <EmptyState title="No activities yet" description="Drag an activity here or add from the list." icon="🗂️" />
         )}
         {items.map(item => (
           <div 
@@ -51,6 +57,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ day, block, items, onRemove 
             onDragStart={(e) => {
               e.dataTransfer.setData('text/plain', item.id);
               e.dataTransfer.effectAllowed = 'move';
+              announce(`Dragging ${item.activity.name}`);
             }}
           >
             <div className="flex items-center justify-between">
@@ -71,10 +78,9 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ day, block, items, onRemove 
                 <MoodSelector 
                   value={item.mood}
                   onChange={(m) => {
-                    // mutate via moveItem trick by recreating schedule in store: quick inline update
-                    // This is a light approach; full store update method could be added.
-                    item.mood = m; // acceptable for transient UI; persisted on next schedule write
+                    updateItemMood(item.id, m);
                     setOpenMoodFor(null);
+                    announce(`Set mood to ${m} for ${item.activity.name}`);
                   }}
                 />
               </div>
