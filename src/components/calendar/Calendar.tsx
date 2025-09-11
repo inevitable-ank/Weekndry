@@ -148,41 +148,41 @@ export const Calendar: React.FC<CalendarProps> = ({
   }
 
   return (
-    <Card variant="elevated" className="w-full">
+    <Card variant="elevated" className="w-full bg-gradient-to-br from-white to-blue-50 border-blue-200 shadow-xl">
       <CardContent className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <CardTitle className="text-2xl">
+          <CardTitle className="text-2xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             {MONTHS[month]} {year}
           </CardTitle>
           <div className="flex gap-2">
             <button
               onClick={() => navigateMonth('prev')}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-blue-100 transition-all duration-200 hover:scale-105"
               aria-label="Previous month"
             >
-              ←
+              <span className="text-lg">←</span>
             </button>
             <button
               onClick={() => setViewMode('year')}
-              className="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 transition-all duration-200 hover:scale-105 shadow-md"
             >
               Year
             </button>
             <button
               onClick={() => navigateMonth('next')}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-lg hover:bg-blue-100 transition-all duration-200 hover:scale-105"
               aria-label="Next month"
             >
-              →
+              <span className="text-lg">→</span>
             </button>
           </div>
         </div>
 
         {/* Day headers */}
-        <div className="grid grid-cols-7 gap-1 mb-2">
+        <div className="grid grid-cols-7 gap-1 mb-4">
           {DAYS.map(day => (
-            <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+            <div key={day} className="text-center text-sm font-semibold text-gray-600 py-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
               {day}
             </div>
           ))}
@@ -201,20 +201,20 @@ export const Calendar: React.FC<CalendarProps> = ({
                 key={index}
                 onClick={() => onDateSelect?.(date)}
                 className={`
-                  relative p-2 text-sm rounded-lg transition-all duration-200
+                  relative p-3 text-sm rounded-xl transition-all duration-300 hover:scale-105
                   ${isCurrentMonthDay 
-                    ? 'text-gray-800 hover:bg-blue-50' 
-                    : 'text-gray-400 hover:bg-gray-50'
+                    ? 'text-gray-800 hover:bg-gradient-to-br hover:from-blue-50 hover:to-purple-50 hover:text-gray-800 shadow-sm hover:shadow-md' 
+                    : 'text-gray-400 hover:bg-gray-50 hover:text-gray-400'
                   }
-                  ${isTodayDate ? 'bg-blue-100 font-semibold' : ''}
-                  ${isSelectedDate ? 'bg-blue-500 text-white' : ''}
-                  ${holiday ? 'border-l-4 border-l-orange-400' : ''}
+                  ${isTodayDate ? 'bg-gradient-to-br from-blue-100 to-purple-100 font-semibold hover:from-blue-200 hover:to-purple-200 shadow-md' : ''}
+                  ${isSelectedDate ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg' : ''}
+                  ${holiday ? 'border-l-4 border-l-orange-400 bg-gradient-to-r from-orange-50/50 to-transparent' : ''}
                 `}
               >
                 <div className="flex flex-col items-center">
                   <span>{date.getDate()}</span>
                   {holiday && isCurrentMonthDay && (
-                    <div className="w-1.5 h-1.5 bg-orange-400 rounded-full mt-1" />
+                    <div className="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-400 rounded-full mt-1 shadow-sm" />
                   )}
                 </div>
               </button>
@@ -224,20 +224,33 @@ export const Calendar: React.FC<CalendarProps> = ({
 
         {/* Holiday legend */}
         {showHolidays && monthHolidays.length > 0 && (
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <h4 className="font-semibold text-gray-800 mb-3">Holidays this month:</h4>
-            <div className="space-y-2">
+          <div className="mt-8 pt-6 border-t border-gradient-to-r from-blue-200 to-purple-200">
+            <h4 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="text-xl">🎉</span>
+              Holidays this month:
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {monthHolidays.map((holiday, index) => (
-                <div key={index} className="flex items-center gap-3">
+                <div key={index} className="flex items-center gap-3 p-3 bg-white/60 rounded-lg hover:bg-white/80 transition-all duration-200">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm ${
+                    holiday.type === 'national' ? 'bg-gradient-to-r from-orange-500 to-red-500' :
+                    holiday.type === 'religious' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
+                    'bg-gradient-to-r from-blue-500 to-cyan-500'
+                  }`}>
+                    {new Date(holiday.date).getDate()}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium text-sm text-gray-800">{holiday.name}</div>
+                    <div className="text-xs text-gray-500">
+                      {new Date(holiday.date).getDate()} {MONTHS[month]}
+                    </div>
+                  </div>
                   <Badge 
                     variant="secondary" 
-                    className={getHolidayColor(holiday.type)}
+                    className={`text-xs ${getHolidayColor(holiday.type)}`}
                   >
                     {holiday.type}
                   </Badge>
-                  <span className="text-sm text-gray-600">
-                    {new Date(holiday.date).getDate()} {MONTHS[month]} - {holiday.name}
-                  </span>
                 </div>
               ))}
             </div>
