@@ -5,11 +5,16 @@ import { HomePage } from './pages/HomePage';
 import { PlannerPage } from './pages/PlannerPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { SchedulePage } from './pages/SchedulePage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Layout><HomePage onStart={() => window.location.assign('/planner')} /></Layout>,
+  },
+  {
+    path: '/schedule',
+    element: <Layout><SchedulePage /></Layout>,
   },
   {
     path: '/planner',

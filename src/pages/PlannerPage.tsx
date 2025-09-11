@@ -7,12 +7,14 @@ import { ScheduleTimeline } from '../components/schedule/ScheduleTimeline';
 import { useSchedule } from '../store/scheduleStore';
 import type { Day, TimeBlock } from '../types/schedule';
 import { ShareCard } from '../components/share/ShareCard';
+import { ShareModal } from '../components/share/ShareModal';
 
 export const PlannerPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState<Day>('Saturday');
   const [selectedBlock, setSelectedBlock] = useState<TimeBlock>('morning');
   const { addActivity } = useSchedule();
+  const [shareOpen, setShareOpen] = useState(false);
 
   return (
     <>
@@ -64,6 +66,7 @@ export const PlannerPage: React.FC = () => {
               <option>afternoon</option>
               <option>evening</option>
             </select>
+            <Button variant="secondary" onClick={() => setShareOpen(true)} icon="📤">Share</Button>
           </div>
         </div>
         <WeekendSchedule />
@@ -119,6 +122,9 @@ export const PlannerPage: React.FC = () => {
           <Button variant="ghost" onClick={() => setIsModalOpen(false)}>Close</Button>
         </ModalFooter>
       </Modal>
+
+      {/* Share modal */}
+      <ShareModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
     </>
   );
 };

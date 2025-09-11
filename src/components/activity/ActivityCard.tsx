@@ -2,6 +2,7 @@ import React from 'react';
 import type { Activity } from '../../types';
 import { Card, CardContent, CardTitle, Badge, Button } from '../ui';
 import { geocode } from '../../services/mapsService';
+import { useActivityStore } from '../../store/activityStore';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -10,6 +11,8 @@ interface ActivityCardProps {
 
 const ActivityCardBase: React.FC<ActivityCardProps> = ({ activity, onSelect }) => {
   const clickable = Boolean(onSelect);
+  const { toggleFavorite, isFavorite } = useActivityStore();
+  const fav = isFavorite(activity.id);
   const onMap = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const query = activity.location ?? activity.name;
@@ -43,7 +46,10 @@ const ActivityCardBase: React.FC<ActivityCardProps> = ({ activity, onSelect }) =
         {activity.durationMinutes && (
           <p className="text-xs text-gray-500 mt-1">{activity.durationMinutes} min • energy {activity.energyLevel ?? 2}/5</p>
         )}
-        <div className="mt-2 flex justify-end">
+        <div className="mt-2 flex justify-end gap-2">
+          <Button size="sm" variant={fav ? 'success' : 'ghost'} onClick={(e) => { e.stopPropagation(); toggleFavorite(activity.id); }} icon={fav ? '⭐' : '☆'}>
+            {fav ? 'Favorited' : 'Favorite'}
+          </Button>
           <Button size="sm" variant="ghost" onClick={onMap} icon="🗺️">Map</Button>
         </div>
       </CardContent>
