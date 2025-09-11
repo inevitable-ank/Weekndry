@@ -12,6 +12,7 @@ export interface ScheduledItem {
   activity: Activity;
   day: Day;
   block: TimeBlock;
+  startMinutes?: number; // minutes since 00:00 for Day View alignment
   mood?: ActivityMood; // user-assigned mood for this instance
   notes?: string;
 }

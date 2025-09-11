@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Button } from '../components/ui';
+import { Link } from 'react-router-dom';
 import { ShareCard } from '../components/share/ShareCard';
 import { ExportOptions } from '../components/share/ExportOptions';
 import { QRCodeGenerator } from '../components/share/QRCodeGenerator';
@@ -16,6 +17,7 @@ export const SchedulePage: React.FC = () => {
           <p className="text-gray-600">Clean, printable view. Share or export below.</p>
         </div>
         <div className="flex items-center gap-2">
+          <Link to="/weekend"><Button variant="secondary">Open Weekend Timeline</Button></Link>
           <Button variant="secondary" onClick={() => window.print()} icon="🖨️">Print</Button>
         </div>
       </div>

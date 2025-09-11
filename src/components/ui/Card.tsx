@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   variant?: 'default' | 'glass' | 'elevated' | 'outlined';
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -19,6 +19,7 @@ export const Card: React.FC<CardProps> = ({
   onClick,
   hover = true,
   padding = 'md',
+  ...rest
 }) => {
   const baseClasses = "rounded-2xl transition-all duration-300";
   
@@ -47,7 +48,7 @@ export const Card: React.FC<CardProps> = ({
   const clickableClasses = onClick ? "cursor-pointer" : "";
 
   const cardContent = (
-    <div className={`${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${clickableClasses} ${className}`}>
+    <div className={`${baseClasses} ${variantClasses[variant]} ${paddingClasses[padding]} ${hoverClasses} ${clickableClasses} ${className}`} {...rest}>
       {children}
     </div>
   );

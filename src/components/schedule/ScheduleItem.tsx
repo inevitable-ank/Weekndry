@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { ScheduledItem } from '../../types/schedule';
-import { Button } from '../ui';
+import { Button, Input } from '../ui';
+import { useSchedule } from '../../store/scheduleStore';
 import { MoodSelector } from '../mood/MoodSelector';
 
 interface ScheduleItemProps {
@@ -12,6 +13,16 @@ interface ScheduleItemProps {
 
 export const ScheduleItem: React.FC<ScheduleItemProps> = ({ item, onRemove, onChangeMood, onDragStart }) => {
   const [openMood, setOpenMood] = useState(false);
+  const { updateItemTime } = useSchedule();
+  const start = item.startMinutes ?? (item.block === 'morning' ? 8*60 : item.block === 'afternoon' ? 13*60 : 18*60);
+  const hours = Math.floor(start / 60);
+  const minutes = start % 60;
+  const onTimeChange = (value: string) => {
+    const [h, m] = value.split(':').map(Number);
+    if (Number.isFinite(h) && Number.isFinite(m)) {
+      updateItemTime(item.id, h*60 + m);
+    }
+  };
 
   return (
     <div 
@@ -32,6 +43,13 @@ export const ScheduleItem: React.FC<ScheduleItemProps> = ({ item, onRemove, onCh
           )}
         </div>
         <div className="flex items-center gap-2">
+          <Input
+            aria-label="Start time"
+            type="time"
+            value={`${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}`}
+            onChange={(e) => onTimeChange(e.target.value)}
+            className="w-[110px]"
+          />
           <Button size="sm" variant="ghost" onClick={() => setOpenMood((p) => !p)}>Mood</Button>
           <Button size="sm" variant="ghost" onClick={() => onRemove(item.id)}>Remove</Button>
         </div>
