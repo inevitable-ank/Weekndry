@@ -19,6 +19,8 @@ import { ACTIVITIES } from './data/activities'
 import { WeekendSchedule } from './components/schedule/WeekendSchedule'
 import { ScheduleProvider, useSchedule } from './store/scheduleStore'
 import { Day, TimeBlock } from './types/schedule'
+import { ThemeProvider } from './store/themeStore'
+import { ThemeSelector } from './components/theme/ThemeSelector'
 
 function Planner() {
   const [count, setCount] = useState(0)
@@ -51,12 +53,12 @@ function Planner() {
         <h1 className="text-6xl font-bold weekendly-text mb-4">
           Weekendly
         </h1>
-        <p className="text-xl text-gray-600 mb-2">
+        <p className="text-xl text-gray-600 mb-6">
           Your Perfect Weekend Planner
         </p>
-        <p className="text-sm text-gray-500">
-          Built with Custom UI Components + Tailwind CSS
-        </p>
+        <div className="flex justify-center">
+          <ThemeSelector />
+        </div>
       </div>
 
       {/* Activity Section */}
@@ -155,8 +157,10 @@ function Planner() {
 
 export default function App() {
   return (
-    <ScheduleProvider>
-      <Planner />
-    </ScheduleProvider>
+    <ThemeProvider>
+      <ScheduleProvider>
+        <Planner />
+      </ScheduleProvider>
+    </ThemeProvider>
   )
 }
