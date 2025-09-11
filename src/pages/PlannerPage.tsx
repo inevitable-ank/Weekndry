@@ -3,6 +3,7 @@ import { Button, Modal, ModalContent, ModalFooter } from '../components/ui';
 import { ActivityBrowser } from '../components/activity/ActivityBrowser';
 import { ACTIVITIES } from '../data/activities';
 import { WeekendSchedule } from '../components/schedule/WeekendSchedule';
+import { ScheduleTimeline } from '../components/schedule/ScheduleTimeline';
 import { useSchedule } from '../store/scheduleStore';
 import type { Day, TimeBlock } from '../types/schedule';
 
@@ -39,8 +40,8 @@ export const PlannerPage: React.FC = () => {
       <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-12" />
 
       {/* Schedule Section */}
-      <section className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-4">
+      <section className="max-w-6xl mx-auto space-y-8">
+        <div className="flex items-center justify-between">
           <h3 className="text-2xl font-bold text-gray-800">Weekend Schedule</h3>
           <div className="flex gap-2">
             <select
@@ -65,6 +66,7 @@ export const PlannerPage: React.FC = () => {
           </div>
         </div>
         <WeekendSchedule />
+        <ScheduleTimeline />
       </section>
 
       {/* Add to schedule modal */}
