@@ -6,6 +6,7 @@ import { WeekendSchedule } from '../components/schedule/WeekendSchedule';
 import { ScheduleTimeline } from '../components/schedule/ScheduleTimeline';
 import { useSchedule } from '../store/scheduleStore';
 import type { Day, TimeBlock } from '../types/schedule';
+import { ShareCard } from '../components/share/ShareCard';
 
 export const PlannerPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,6 +68,14 @@ export const PlannerPage: React.FC = () => {
         </div>
         <WeekendSchedule />
         <ScheduleTimeline />
+      </section>
+
+      <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-12" />
+
+      {/* Share & Export */}
+      <section className="max-w-6xl mx-auto space-y-4">
+        <h3 className="text-2xl font-bold text-gray-800">Share & Export</h3>
+        <ShareCard />
       </section>
 
       {/* Add to schedule modal (with details flow) */}
