@@ -3,10 +3,12 @@ import { ThemeSelector } from '../components/theme/ThemeSelector';
 import { Button } from '../components/ui';
 import { useSchedule } from '../store/scheduleStore';
 import { useTheme } from '../store/themeStore';
+import { useUserStore } from '../store/userStore';
 
 export const SettingsPage: React.FC = () => {
   const { schedule, clear } = useSchedule();
   const { theme } = useTheme();
+  const { city, showDiscover, setCity, toggleDiscover } = useUserStore();
   const [importText, setImportText] = useState('');
 
   const onExport = () => {
@@ -38,6 +40,23 @@ export const SettingsPage: React.FC = () => {
       <div>
         <h3 className="text-lg font-semibold mb-2">Theme</h3>
         <ThemeSelector />
+      </div>
+      <div className="max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-4" />
+      <div>
+        <h3 className="text-lg font-semibold mb-2">Preferences</h3>
+        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+          <label className="text-sm text-gray-700">Default city</label>
+          <input 
+            className="border rounded-lg px-3 py-2 w-full sm:w-auto"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            placeholder="Your city"
+          />
+          <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+            <input type="checkbox" checked={showDiscover} onChange={toggleDiscover} />
+            Show Discover panel
+          </label>
+        </div>
       </div>
       <div className="max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-4" />
       <div className="space-y-3">

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Button, Card } from '../components/ui';
+import { Button } from '../components/ui';
 import { ShareCard } from '../components/share/ShareCard';
 import { ExportOptions } from '../components/share/ExportOptions';
 import { QRCodeGenerator } from '../components/share/QRCodeGenerator';
@@ -22,11 +22,9 @@ export const SchedulePage: React.FC = () => {
 
       <div className="max-w-6xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
-      <Card className="p-4">
-        <div ref={exportRef as any}>
-          <ShareCard />
-        </div>
-      </Card>
+      <div ref={exportRef as any}>
+        <ShareCard />
+      </div>
 
       <div className="flex flex-col md:flex-row items-start justify-between gap-6">
         <ExportOptions targetRef={exportRef as any} />

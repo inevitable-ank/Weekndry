@@ -1,7 +1,6 @@
 import React from 'react';
 import reactLogo from '../../assets/react.svg';
 import viteLogo from '/vite.svg';
-import { ThemeSelector } from '../theme/ThemeSelector';
 import { Navigation } from './Navigation';
 
 export const Header: React.FC = () => {
@@ -16,7 +15,6 @@ export const Header: React.FC = () => {
           </div>
           <div className="flex items-center gap-4">
             <Navigation />
-            <ThemeSelector />
           </div>
         </div>
       </div>
