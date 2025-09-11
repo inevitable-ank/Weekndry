@@ -17,6 +17,7 @@ export const DaySchedule: React.FC<DayScheduleProps> = ({ day }) => {
       {BLOCKS.map(block => (
         <TimeSlot 
           key={block} 
+          day={day}
           block={block} 
           items={schedule[day][block]} 
           onRemove={removeItem}

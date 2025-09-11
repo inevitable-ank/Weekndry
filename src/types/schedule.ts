@@ -1,4 +1,5 @@
 import { Activity } from './activity';
+import type { ActivityMood } from './activity';
 
 export type Day = 'Saturday' | 'Sunday';
 export const DAYS: Day[] = ['Saturday', 'Sunday'];
@@ -11,6 +12,7 @@ export interface ScheduledItem {
   activity: Activity;
   day: Day;
   block: TimeBlock;
+  mood?: ActivityMood; // user-assigned mood for this instance
   notes?: string;
 }
 
