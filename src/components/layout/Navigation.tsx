@@ -19,6 +19,12 @@ export const Navigation: React.FC = () => {
         Planner
       </NavLink>
       <NavLink
+        to="/calendar"
+        className={({ isActive }) => `${linkBase} ${isActive ? 'bg-black/10 text-gray-900' : 'text-gray-600 hover:bg-black/5'}`}
+      >
+        Calendar
+      </NavLink>
+      <NavLink
         to="/settings"
         className={({ isActive }) => `${linkBase} ${isActive ? 'bg-black/10 text-gray-900' : 'text-gray-600 hover:bg-black/5'}`}
       >

@@ -7,6 +7,7 @@ import { SettingsPage } from './pages/SettingsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { SchedulePage } from './pages/SchedulePage';
 import { DayViewPage } from './pages/DayViewPage';
+import { CalendarPage } from './pages/CalendarPage';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: '/planner',
     element: <Layout><PlannerPage /></Layout>,
+  },
+  {
+    path: '/calendar',
+    element: <Layout><CalendarPage /></Layout>,
   },
   {
     path: '/settings',
