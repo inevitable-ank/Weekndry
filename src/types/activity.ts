@@ -37,3 +37,4 @@ export interface ActivityGroup {
   category: ActivityCategory;
   activities: Activity[];
 }
+

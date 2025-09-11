@@ -31,3 +31,4 @@ export function useAnnouncer() {
   if (!ctx) throw new Error('useAnnouncer must be used within A11yAnnouncer');
   return ctx;
 }
+

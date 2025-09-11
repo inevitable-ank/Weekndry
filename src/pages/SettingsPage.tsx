@@ -39,6 +39,7 @@ export const SettingsPage: React.FC = () => {
         <h3 className="text-lg font-semibold mb-2">Theme</h3>
         <ThemeSelector />
       </div>
+      <div className="max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-4" />
       <div className="space-y-3">
         <h3 className="text-lg font-semibold">Backup & Restore</h3>
         <div className="flex gap-2">

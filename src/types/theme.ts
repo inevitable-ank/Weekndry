@@ -7,3 +7,4 @@ export interface ThemeConfig {
   accentClass: string; // accent gradient
   previewEmoji: string;
 }
+

@@ -16,3 +16,4 @@ export function useActivities(all: Activity[]) {
 
   return { filtered, query, setQuery, categories, setCategories };
 }
+

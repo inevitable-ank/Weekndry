@@ -11,3 +11,4 @@ export async function exportElementToPng(el: HTMLElement, fileName = 'weekendly.
   link.href = dataUrl;
   link.click();
 }
+

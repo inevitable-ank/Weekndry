@@ -50,3 +50,4 @@ export const ScheduleItem: React.FC<ScheduleItemProps> = ({ item, onRemove, onCh
     </div>
   );
 };
+

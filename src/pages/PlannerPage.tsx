@@ -69,7 +69,7 @@ export const PlannerPage: React.FC = () => {
         <ScheduleTimeline />
       </section>
 
-      {/* Add to schedule modal */}
+      {/* Add to schedule modal (with details flow) */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)}
@@ -78,7 +78,7 @@ export const PlannerPage: React.FC = () => {
       >
         <ModalContent>
           <div className="space-y-4">
-            <p className="text-sm text-gray-600">Choose a day and time, then click an activity.</p>
+            <p className="text-sm text-gray-600">Choose a day and time, then click an activity and press Add in details.</p>
             <div className="flex gap-2">
               <select
                 className="border rounded-lg px-3 py-2"
@@ -100,9 +100,8 @@ export const PlannerPage: React.FC = () => {
             </div>
             <ActivityBrowser
               activities={ACTIVITIES}
-              onSelect={(a) => {
+              onAdd={(a) => {
                 addActivity(a, selectedDay, selectedBlock)
-                setIsModalOpen(false)
               }}
             />
           </div>

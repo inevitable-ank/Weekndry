@@ -22,7 +22,7 @@ export const Badge: React.FC<BadgeProps> = ({
   removable = false,
   onRemove,
 }) => {
-  const baseClasses = "inline-flex items-center font-medium transition-all duration-300";
+  const baseClasses = "inline-flex items-center font-medium transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500";
   
   const variantClasses = {
     default: "bg-gray-100 text-gray-800 hover:bg-gray-200",
@@ -69,7 +69,7 @@ export const Badge: React.FC<BadgeProps> = ({
             e.stopPropagation();
             onRemove();
           }}
-          className="ml-1 flex-shrink-0 hover:bg-black/10 rounded-full p-0.5 transition-colors duration-200"
+          className="ml-1 flex-shrink-0 hover:bg-black/10 rounded-full p-0.5 transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
         >
           <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -107,4 +107,5 @@ export const ActivityBadge: React.FC<{ category: string; className?: string }> =
     </Badge>
   );
 };
+
 

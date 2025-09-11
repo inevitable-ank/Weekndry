@@ -44,3 +44,4 @@ export const ScheduleTimeline: React.FC = () => {
     </div>
   );
 };
+

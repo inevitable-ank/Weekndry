@@ -28,3 +28,4 @@ const router = createBrowserRouter([
 export const AppRouter: React.FC = () => (
   <RouterProvider router={router} />
 );
+

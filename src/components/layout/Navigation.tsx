@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const linkBase = 'px-3 py-2 rounded-lg text-sm font-medium transition-colors';
+const linkBase = 'px-3 py-2 rounded-lg text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500';
 
 export const Navigation: React.FC = () => {
   return (
@@ -27,3 +27,4 @@ export const Navigation: React.FC = () => {
     </nav>
   );
 };
+

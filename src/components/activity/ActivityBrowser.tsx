@@ -1,19 +1,25 @@
 import React, { useMemo, useState } from 'react';
 import type { Activity, ActivityCategory } from '../../types';
-import { Input, Badge } from '../ui';
+import { Modal, ModalContent, ModalFooter, Button } from '../ui';
 import { ActivityCard } from './ActivityCard';
 import { EmptyState } from '../common/EmptyState';
+import { ActivityDetails } from './ActivityDetails';
+import { ActivityFilter } from './ActivityFilter';
+import { DiscoverPanel } from './DiscoverPanel';
 
 interface ActivityBrowserProps {
   activities: Activity[];
-  onSelect?: (activity: Activity) => void;
+  onSelect?: (activity: Activity) => void; // legacy click handler
+  onAdd?: (activity: Activity) => void;    // when provided, shows details modal with Add
 }
 
 const CATEGORIES: ActivityCategory[] = ['food','entertainment','outdoor','relaxation','learning','social','fitness','travel'];
 
-export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, onSelect }) => {
+export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, onSelect, onAdd }) => {
   const [query, setQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<ActivityCategory[]>([]);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [active, setActive] = useState<Activity | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -28,31 +34,30 @@ export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, on
     setSelectedCategories(prev => prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]);
   };
 
+  const handleCardClick = (a: Activity) => {
+    if (onAdd) {
+      setActive(a);
+    } else if (onSelect) {
+      onSelect(a);
+    }
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-3 items-start md:items-center justify-between">
-        <Input 
-          placeholder="Search activities..."
-          aria-label="Search activities"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          icon="🔎"
-          className="md:max-w-sm"
+      {/* Mobile filters toggle */}
+      <div className="md:hidden flex justify-end">
+        <Button variant="secondary" size="sm" onClick={() => setFiltersOpen(v => !v)} aria-expanded={filtersOpen} aria-controls="activity-filters">
+          {filtersOpen ? 'Hide Filters' : 'Show Filters'}
+        </Button>
+      </div>
+
+      <div id="activity-filters" className={` ${filtersOpen ? 'block' : 'hidden'} md:block`}>
+        <ActivityFilter 
+          query={query}
+          onQueryChange={setQuery}
+          selected={selectedCategories}
+          onToggleCategory={toggleCategory}
         />
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
-          {CATEGORIES.map(cat => (
-            <Badge 
-              key={cat}
-              variant={selectedCategories.includes(cat) ? 'primary' : 'default'}
-              removable={selectedCategories.includes(cat)}
-              onRemove={() => toggleCategory(cat)}
-              className="cursor-pointer"
-              onClick={() => toggleCategory(cat) as any}
-            >
-              {cat}
-            </Badge>
-          ))}
-        </div>
       </div>
 
       {filtered.length === 0 ? (
@@ -64,9 +69,29 @@ export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, on
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map(a => (
-            <ActivityCard key={a.id} activity={a} onSelect={onSelect} />
+            <div key={a.id}>
+              <ActivityCard activity={a} onSelect={handleCardClick} />
+            </div>
           ))}
         </div>
+      )}
+
+      {/* Discover panel */}
+      <DiscoverPanel />
+
+      {/* Details Modal (when onAdd is provided) */}
+      {onAdd && (
+        <Modal isOpen={!!active} onClose={() => setActive(null)} title={active?.name} size="md">
+          <ModalContent>
+            {active && (
+              <ActivityDetails activity={active} />
+            )}
+          </ModalContent>
+          <ModalFooter>
+            <Button variant="ghost" onClick={() => setActive(null)}>Close</Button>
+            {active && <Button onClick={() => { onAdd(active); setActive(null); }} icon="➕">Add</Button>}
+          </ModalFooter>
+        </Modal>
       )}
     </div>
   );
