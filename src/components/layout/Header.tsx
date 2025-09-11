@@ -2,6 +2,7 @@ import React from 'react';
 import reactLogo from '../../assets/react.svg';
 import viteLogo from '/vite.svg';
 import { ThemeSelector } from '../theme/ThemeSelector';
+import { Navigation } from './Navigation';
 
 export const Header: React.FC = () => {
   return (
@@ -13,7 +14,10 @@ export const Header: React.FC = () => {
             <img src={reactLogo} className="h-8 w-8 animate-spin-slow" alt="React logo" />
             <h1 className="text-2xl font-extrabold weekendly-text">Weekendly</h1>
           </div>
-          <ThemeSelector />
+          <div className="flex items-center gap-4">
+            <Navigation />
+            <ThemeSelector />
+          </div>
         </div>
       </div>
     </header>
