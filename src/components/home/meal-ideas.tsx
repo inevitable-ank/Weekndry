@@ -101,7 +101,7 @@ export function MealIdeas() {
           </button>
 
           {/* Carousel Container */}
-          <div className="overflow-hidden relative">
+          <div className="overflow-hidden relative mx-auto" style={{ width: 'calc(3 * 320px + 2 * 32px)' }}>
             <div 
               className="flex gap-8 transition-transform duration-700 ease-in-out"
               style={{
