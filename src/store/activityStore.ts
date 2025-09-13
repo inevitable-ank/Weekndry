@@ -15,3 +15,4 @@ export const useActivityStore = create<ActivityState>((set, get) => ({
   isFavorite: (id: string) => Boolean(get().favorites[id]),
 }));
 
+

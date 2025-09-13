@@ -82,3 +82,4 @@ function getSuggestionForWeather(condition?: string): string {
 }
 
 
+

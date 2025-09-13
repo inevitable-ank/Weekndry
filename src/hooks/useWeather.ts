@@ -77,3 +77,4 @@ function iconForCondition(condition: string): string {
 }
 
 
+

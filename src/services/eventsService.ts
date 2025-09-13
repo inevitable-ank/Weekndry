@@ -27,3 +27,4 @@ export async function fetchLocalEvents(city: string): Promise<LocalEvent[]> {
 }
 
 
+

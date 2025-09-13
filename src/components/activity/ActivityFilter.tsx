@@ -40,3 +40,4 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({ query, onQueryCh
   );
 };
 
+

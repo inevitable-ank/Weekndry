@@ -26,3 +26,4 @@ function mapWeatherCode(code: number): string {
 }
 
 
+
