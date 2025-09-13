@@ -119,8 +119,10 @@ export function ActivityCards() {
                 </div>
 
                 <Button className="w-full" size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add to Weekend
+                  <span className="flex items-center justify-center gap-2">
+                    <Plus className="h-4 w-4" />
+                    Add to Weekend
+                  </span>
                 </Button>
               </CardContent>
             </Card>

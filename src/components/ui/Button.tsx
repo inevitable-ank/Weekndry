@@ -38,7 +38,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
     xl: "px-10 py-5 text-xl",
   } as const;
 
-  const hoverClasses = !disabled && !loading ? "hover:scale-105" : "";
+  const hoverClasses = "";
 
   return (
     <motion.button

@@ -142,8 +142,10 @@ export function MealIdeas() {
                     </div>
 
                     <Button className="w-full" size="sm">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Add to Plan
+                      <span className="flex items-center justify-center gap-2">
+                        <Plus className="h-4 w-4" />
+                        Add to Plan
+                      </span>
                     </Button>
                   </CardContent>
                 </Card>
