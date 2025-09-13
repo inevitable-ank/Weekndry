@@ -31,14 +31,18 @@ export function Hero() {
           </p>
 
           {/* CTA buttons */}
-          <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
-            <Button size="lg" className="h-12 px-8 text-base font-semibold">
-              Start Planning
-              <ArrowRight className="ml-2 h-5 w-5" />
+          <div className="mt-10 flex items-center justify-center gap-6 flex-wrap">
+            <Button size="lg" className="px-8 py-4 text-base font-semibold rounded-lg">
+              <span className="flex items-center gap-3">
+                Start Planning
+                <ArrowRight className="h-5 w-5" />
+              </span>
             </Button>
-            <Button variant="secondary" size="lg" className="h-12 px-8 text-base bg-transparent">
-              <Calendar className="mr-2 h-5 w-5" />
-              View Demo
+            <Button variant="secondary" size="lg" className="px-8 py-4 text-base font-medium rounded-lg">
+              <span className="flex items-center gap-3">
+                <Calendar className="h-5 w-5" />
+                View Demo
+              </span>
             </Button>
           </div>
 
