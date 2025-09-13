@@ -42,21 +42,6 @@ export function Hero() {
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">500+</div>
-              <div className="text-sm text-muted-foreground">Activities Available</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">50k+</div>
-              <div className="text-sm text-muted-foreground">Weekends Planned</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary">98%</div>
-              <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
