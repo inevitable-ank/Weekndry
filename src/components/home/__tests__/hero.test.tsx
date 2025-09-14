@@ -127,3 +127,4 @@ describe('Hero', () => {
     expect(screen.getByText(/create unforgettable Saturday-Sunday experiences/)).toBeInTheDocument()
   })
 })
+

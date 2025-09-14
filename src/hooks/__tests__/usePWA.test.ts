@@ -25,8 +25,9 @@ describe('usePWA', () => {
       userChoice: mockUserChoice,
     }
     
-    const originalAddEventListener = window.addEventListener
-    const originalRemoveEventListener = window.removeEventListener
+    // Store original event listeners for cleanup
+    // const originalAddEventListener = window.addEventListener
+    // const originalRemoveEventListener = window.removeEventListener
     
     window.addEventListener = vi.fn((event, handler) => {
       if (event === 'beforeinstallprompt') {

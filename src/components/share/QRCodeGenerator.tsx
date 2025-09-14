@@ -9,3 +9,4 @@ export const QRCodeGenerator: React.FC<{ data: string; size?: number; className?
 
 
 
+

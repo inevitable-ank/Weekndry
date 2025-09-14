@@ -91,7 +91,16 @@ describe('useWeather', () => {
   it('should handle geolocation failure and use default city', async () => {
     // Mock failed geolocation
     vi.mocked(navigator.geolocation.getCurrentPosition).mockImplementation((_, error) => {
-      error(new Error('Geolocation failed'))
+      const geolocationError = {
+        code: 1,
+        message: 'Geolocation failed',
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      } as GeolocationPositionError
+      if (error) {
+        error(geolocationError)
+      }
     })
 
     // Mock successful weather API response for Mumbai
@@ -136,7 +145,16 @@ describe('useWeather', () => {
   it('should handle API errors gracefully', async () => {
     // Mock failed geolocation
     vi.mocked(navigator.geolocation.getCurrentPosition).mockImplementation((_, error) => {
-      error(new Error('Geolocation failed'))
+      const geolocationError = {
+        code: 1,
+        message: 'Geolocation failed',
+        PERMISSION_DENIED: 1,
+        POSITION_UNAVAILABLE: 2,
+        TIMEOUT: 3
+      } as GeolocationPositionError
+      if (error) {
+        error(geolocationError)
+      }
     })
 
     // Mock failed weather API
