@@ -91,7 +91,7 @@ export const Modal: React.FC<ModalProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" aria-hidden={!isOpen}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4" aria-hidden={!isOpen}>
           {/* Backdrop */}
           <motion.div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
@@ -105,7 +105,7 @@ export const Modal: React.FC<ModalProps> = ({
           {/* Modal */}
           <motion.div
             ref={dialogRef}
-            className={`relative w-full ${sizeClasses[size]} bg-white rounded-2xl shadow-2xl ${className}`}
+            className={`relative w-full max-h-[90vh] ${sizeClasses[size]} bg-white rounded-2xl shadow-2xl flex flex-col ${className}`}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -117,7 +117,7 @@ export const Modal: React.FC<ModalProps> = ({
           >
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-100 flex-shrink-0">
                 {title && (
                   <h2 id={headingId} className="text-xl font-bold text-gray-800">
                     {title}
@@ -141,7 +141,7 @@ export const Modal: React.FC<ModalProps> = ({
             )}
             
             {/* Content */}
-            <div className="p-6">
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0">
               {children}
             </div>
           </motion.div>
@@ -192,7 +192,7 @@ export const ModalFooter: React.FC<{ children: React.ReactNode; className?: stri
   children, 
   className = '' 
 }) => (
-  <div className={`mt-6 pt-4 border-t border-gray-100 flex justify-end space-x-3 ${className}`}>
+  <div className={`mt-6 pt-4 border-t border-gray-100 flex justify-end space-x-3 flex-shrink-0 ${className}`}>
     {children}
   </div>
 );

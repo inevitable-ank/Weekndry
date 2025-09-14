@@ -13,7 +13,6 @@ interface ActivityBrowserProps {
   onAdd?: (activity: Activity) => void;    // when provided, shows details modal with Add
 }
 
-const CATEGORIES: ActivityCategory[] = ['food','entertainment','outdoor','relaxation','learning','social','fitness','travel'];
 
 export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, onSelect, onAdd }) => {
   const [query, setQuery] = useState('');
@@ -89,7 +88,7 @@ export const ActivityBrowser: React.FC<ActivityBrowserProps> = ({ activities, on
           </ModalContent>
           <ModalFooter>
             <Button variant="ghost" onClick={() => setActive(null)}>Close</Button>
-            {active && <Button onClick={() => { onAdd(active); setActive(null); }} icon="➕">Add</Button>}
+            {active && <Button onClick={() => { onAdd(active); setActive(null); }} icon="➕">Add to Schedule</Button>}
           </ModalFooter>
         </Modal>
       )}

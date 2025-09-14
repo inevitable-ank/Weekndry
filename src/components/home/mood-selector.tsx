@@ -39,13 +39,28 @@ const moods = [
 
 export function MoodSelector() {
   const [selectedMoods, setSelectedMoods] = useState<string[]>([])
+  const [currentMood, setCurrentMood] = useState<string>('relaxed')
 
   const toggleMood = (moodId: string) => {
     setSelectedMoods((prev) => (prev.includes(moodId) ? prev.filter((id) => id !== moodId) : [...prev, moodId]))
+    setCurrentMood(moodId) // Set the current mood for color changes
+  }
+
+  // Simple color mapping
+  const getMoodColors = (mood: string) => {
+    const colors = {
+      relaxed: 'bg-blue-50',
+      adventurous: 'bg-green-50', 
+      energetic: 'bg-yellow-50',
+      social: 'bg-purple-50',
+      creative: 'bg-pink-50',
+      happy: 'bg-orange-50'
+    }
+    return colors[mood as keyof typeof colors] || colors.relaxed
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8">
+    <section className={`py-16 px-4 sm:px-6 lg:px-8 transition-colors duration-300 ${getMoodColors(currentMood)}`}>
       <div className="mx-auto max-w-7xl">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-foreground sm:text-4xl text-balance">What's Your Weekend Vibe?</h2>

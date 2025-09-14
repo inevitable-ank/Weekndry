@@ -5,11 +5,9 @@ import { geocode } from '../../services/mapsService';
 
 interface ActivityDetailsProps {
   activity: Activity;
-  onAdd?: () => void;
-  onClose?: () => void;
 }
 
-export const ActivityDetails: React.FC<ActivityDetailsProps> = ({ activity, onAdd, onClose }) => {
+export const ActivityDetails: React.FC<ActivityDetailsProps> = ({ activity }) => {
   const onMapIt = async () => {
     const query = activity.location ?? activity.name;
     if (!query) return;
@@ -48,8 +46,6 @@ export const ActivityDetails: React.FC<ActivityDetailsProps> = ({ activity, onAd
       </div>
       <div className="flex gap-2 justify-end">
         <Button variant="secondary" onClick={onMapIt} icon="🗺️">Map it</Button>
-        {onClose && <Button variant="ghost" onClick={onClose}>Close</Button>}
-        {onAdd && <Button onClick={onAdd} icon="➕">Add</Button>}
       </div>
     </div>
   );

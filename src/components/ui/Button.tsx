@@ -40,11 +40,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
 
   const hoverClasses = "";
 
+  // Check if custom className contains color classes (bg-, text-, border-)
+  const hasCustomColors = className.includes('bg-') || className.includes('text-') || className.includes('border-')
+  
   return (
     <motion.button
       ref={ref}
       type={type}
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${hoverClasses} ${className}`}
+      className={`${baseClasses} ${hasCustomColors ? '' : variantClasses[variant]} ${sizeClasses[size]} ${hoverClasses} ${className}`}
       disabled={disabled || loading}
       aria-busy={loading}
       whileHover={!disabled && !loading ? { scale: 1.05 } : {}}
