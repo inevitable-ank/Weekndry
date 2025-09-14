@@ -22,7 +22,7 @@ export const HomePage: React.FC<{ onStart?: () => void }> = ({ onStart }) => {
       
       {/* Meal Ideas Section */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-muted/30 to-transparent -z-10"></div>
         <MealIdeas />
       </div>
       

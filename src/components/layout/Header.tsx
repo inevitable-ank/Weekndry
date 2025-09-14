@@ -1,6 +1,5 @@
 import React from 'react';
-import reactLogo from '../../assets/react.svg';
-import viteLogo from '/vite.svg';
+import weekendlyLogo from '../../assets/logo-transparent-svg.svg';
 import { Navigation } from './Navigation';
 
 export const Header: React.FC = () => {
@@ -9,8 +8,7 @@ export const Header: React.FC = () => {
       <div className="max-w-6xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src={viteLogo} className="h-8 w-8" alt="Vite logo" />
-            <img src={reactLogo} className="h-8 w-8 animate-spin-slow" alt="React logo" />
+            <img src={weekendlyLogo} className="h-10 w-10" alt="Weekendly logo" />
             <h1 className="text-2xl font-extrabold weekendly-text">Weekendly</h1>
           </div>
           <div className="flex items-center gap-4">

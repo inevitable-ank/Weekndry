@@ -62,6 +62,7 @@ export function MealIdeas() {
   const cardsPerView = 3
 
   const handleViewRecipes = () => {
+    console.log('View Recipe Collection button clicked!');
     // Redirect to AllRecipes.com with weekend recipe search
     window.open('https://www.allrecipes.com/search/results/?search=weekend%20recipes', '_blank');
   };
@@ -175,9 +176,12 @@ export function MealIdeas() {
         </div>
 
         <div className="text-center mt-8">
-          <Button variant="secondary" size="lg" onClick={handleViewRecipes}>
+          <button 
+            onClick={handleViewRecipes}
+            className="px-8 py-4 text-lg font-semibold bg-white/80 hover:bg-white text-gray-700 border border-gray-200 shadow-lg hover:shadow-xl rounded-xl transition-all duration-300 cursor-pointer"
+          >
             View Recipe Collection
-          </Button>
+          </button>
         </div>
       </div>
     </section>
