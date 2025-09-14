@@ -132,6 +132,11 @@ export const DiscoverPanel: React.FC = () => {
                   Last updated: {lastUpdated.toLocaleTimeString()}
                 </div>
               )}
+              {events.length === 0 && !loadingEvents && (
+                <div className="text-xs text-gray-400 mt-1">
+                  No events found for {weather?.location || 'your location'}
+                </div>
+              )}
             </div>
             <Button 
               size="sm" 
@@ -151,10 +156,17 @@ export const DiscoverPanel: React.FC = () => {
               <span>Loading events...</span>
             </div>
           ) : events.length === 0 ? (
-            <div className="text-center py-4 text-gray-500">
-              <div className="text-2xl mb-2">📅</div>
-              <div className="text-sm">No events found for your location</div>
-              <div className="text-xs mt-1">Try refreshing or check back later</div>
+            <div className="text-center py-8 text-gray-500">
+              <div className="text-4xl mb-4">📅</div>
+              <div className="text-lg font-medium text-gray-700 mb-2">No Events Available</div>
+              <div className="text-sm text-gray-500 mb-4">
+                We couldn't find any events in your area right now.
+              </div>
+              <div className="text-xs text-gray-400 space-y-1">
+                <div>• Check back later for new events</div>
+                <div>• Try refreshing the page</div>
+                <div>• Events are updated every 5 minutes</div>
+              </div>
             </div>
           ) : (
             <div className="space-y-3">
