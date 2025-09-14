@@ -7,10 +7,8 @@ describe('usePWA', () => {
   let mockUserChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>
 
   beforeEach(() => {
-    // Reset all mocks
     vi.clearAllMocks()
     
-    // Mock service worker
     Object.defineProperty(navigator, 'serviceWorker', {
       value: {
         getRegistration: vi.fn().mockResolvedValue(null),
@@ -18,24 +16,20 @@ describe('usePWA', () => {
       writable: true,
     })
 
-    // Mock beforeinstallprompt event
     mockUserChoice = Promise.resolve({ outcome: 'accepted', platform: 'web' })
     mockPrompt = vi.fn().mockResolvedValue(undefined)
     
-    // Mock window events
     const mockEvent = {
       preventDefault: vi.fn(),
       prompt: mockPrompt,
       userChoice: mockUserChoice,
     }
     
-    // Mock addEventListener and removeEventListener
     const originalAddEventListener = window.addEventListener
     const originalRemoveEventListener = window.removeEventListener
     
     window.addEventListener = vi.fn((event, handler) => {
       if (event === 'beforeinstallprompt') {
-        // Simulate the event being fired
         setTimeout(() => {
           if (typeof handler === 'function') {
             handler(mockEvent as any)
@@ -64,7 +58,6 @@ describe('usePWA', () => {
   it('should handle beforeinstallprompt event', async () => {
     const { result } = renderHook(() => usePWA())
     
-    // Wait for the event to be processed
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 10))
     })
@@ -75,7 +68,6 @@ describe('usePWA', () => {
   it('should handle appinstalled event', async () => {
     const { result } = renderHook(() => usePWA())
     
-    // Simulate appinstalled event
     act(() => {
       const event = new Event('appinstalled')
       window.dispatchEvent(event)
@@ -93,10 +85,8 @@ describe('usePWA', () => {
     
     const { result } = renderHook(() => usePWA())
     
-    // Wait for the hook to initialize
     await new Promise(resolve => setTimeout(resolve, 10))
     
-    // Simulate updatefound event if addEventListener was called
     if (mockRegistration.addEventListener.mock.calls.length > 0) {
       act(() => {
         const event = new Event('updatefound')
@@ -110,14 +100,12 @@ describe('usePWA', () => {
   it('should handle promptInstall successfully', async () => {
     const { result } = renderHook(() => usePWA())
     
-    // Wait for beforeinstallprompt event
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 10))
     })
     
     expect(result.current.canInstall).toBe(true)
     
-    // Test promptInstall
     const success = await act(async () => {
       return await result.current.promptInstall()
     })
@@ -131,12 +119,10 @@ describe('usePWA', () => {
     
     const { result } = renderHook(() => usePWA())
     
-    // Wait for beforeinstallprompt event
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 10))
     })
     
-    // Test promptInstall failure
     const success = await act(async () => {
       return await result.current.promptInstall()
     })
@@ -147,7 +133,6 @@ describe('usePWA', () => {
   it('should handle promptInstall when no prompt available', async () => {
     const { result } = renderHook(() => usePWA())
     
-    // Don't trigger beforeinstallprompt event
     expect(result.current.canInstall).toBe(false)
     
     const success = await act(async () => {
@@ -168,7 +153,6 @@ describe('usePWA', () => {
     
     vi.mocked(navigator.serviceWorker.getRegistration).mockResolvedValue(mockRegistration as any)
     
-    // Mock window.location.reload
     const mockReload = vi.fn()
     Object.defineProperty(window, 'location', {
       value: { reload: mockReload },
@@ -188,7 +172,6 @@ describe('usePWA', () => {
   it('should handle reloadToUpdate without service worker', () => {
     vi.mocked(navigator.serviceWorker.getRegistration).mockRejectedValue(new Error('No SW'))
     
-    // Mock window.location.reload
     const mockReload = vi.fn()
     Object.defineProperty(window, 'location', {
       value: { reload: mockReload },

@@ -3,7 +3,6 @@ import { renderHook, act } from '@testing-library/react'
 import { ScheduleProvider, useSchedule } from '../scheduleStore'
 import type { Activity } from '../../types/activity'
 
-// Mock activity for testing
 const mockActivity: Activity = {
   id: 'test-activity',
   name: 'Test Activity',
@@ -26,7 +25,6 @@ const mockActivity2: Activity = {
   icon: '🥾'
 }
 
-// Helper function to render hook with provider
 const renderScheduleHook = () => {
   return renderHook(() => useSchedule(), {
     wrapper: ({ children }) => (
@@ -37,7 +35,6 @@ const renderScheduleHook = () => {
 
 describe('ScheduleStore', () => {
   beforeEach(() => {
-    // Clear localStorage before each test
     localStorage.clear()
     vi.clearAllMocks()
   })
@@ -220,7 +217,6 @@ describe('ScheduleStore', () => {
       result.current.addActivity(mockActivity, 'Saturday', 'morning')
     })
     
-    // Wait for the effect to run and localStorage to be updated
     setTimeout(() => {
       const stored = localStorage.getItem('weekendly_schedule_v1')
       expect(stored).toBeTruthy()
@@ -233,7 +229,6 @@ describe('ScheduleStore', () => {
   })
 
   it('should load schedule from localStorage on initialization', () => {
-    // Pre-populate localStorage
     const initialSchedule = {
       Saturday: {
         morning: [{ 
@@ -255,7 +250,6 @@ describe('ScheduleStore', () => {
     
     localStorage.setItem('weekendly_schedule_v1', JSON.stringify(initialSchedule))
     
-    // Create a new hook instance to test initialization
     const { result } = renderHook(() => useSchedule(), {
       wrapper: ({ children }) => (
         <ScheduleProvider>{children}</ScheduleProvider>
@@ -277,17 +271,13 @@ describe('ScheduleStore', () => {
     const itemId = result.current.schedule.Saturday.morning[0].id
     const originalTime = result.current.schedule.Saturday.morning[0].startMinutes
     
-    // Try to move to a conflicting time (same as second activity)
     act(() => {
-      result.current.updateItemTime(itemId, 480) // 8:00 AM
+      result.current.updateItemTime(itemId, 480)
     })
-    
-    // Should keep original time due to conflict
     expect(result.current.schedule.Saturday.morning[0].startMinutes).toBe(originalTime)
   })
 
   it('should throw error when useSchedule is used outside provider', () => {
-    // Suppress console.error for this test
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     
     expect(() => {

@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { renderHook, waitFor } from '@testing-library/react'
 import { useWeather } from '../useWeather'
 
-// Mock the user store
 vi.mock('../../store/userStore', () => ({
   useUserStore: () => ({
     city: 'Mumbai'
@@ -11,13 +10,10 @@ vi.mock('../../store/userStore', () => ({
 
 describe('useWeather', () => {
   beforeEach(() => {
-    // Reset all mocks
     vi.clearAllMocks()
     
-    // Mock fetch
     global.fetch = vi.fn()
     
-    // Mock geolocation - only if not already defined
     if (!navigator.geolocation) {
       Object.defineProperty(navigator, 'geolocation', {
         value: {
@@ -50,12 +46,10 @@ describe('useWeather', () => {
       }
     }
 
-    // Mock successful geolocation
     vi.mocked(navigator.geolocation.getCurrentPosition).mockImplementation((success) => {
       success(mockPosition as GeolocationPosition)
     })
 
-    // Mock successful weather API response
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({
@@ -66,7 +60,6 @@ describe('useWeather', () => {
       })
     } as Response)
 
-    // Mock successful location API response
     vi.mocked(fetch).mockResolvedValueOnce({
       ok: true,
       json: () => Promise.resolve({

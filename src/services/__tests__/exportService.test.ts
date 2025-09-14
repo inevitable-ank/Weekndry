@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { exportElementToPng } from '../exportService'
 
-// Mock html-to-image
 vi.mock('html-to-image', () => ({
   toPng: vi.fn()
 }))
@@ -13,16 +12,13 @@ describe('exportService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     
-    // Create mock element
     mockElement = document.createElement('div')
     mockElement.textContent = 'Test Element'
     
-    // Create mock link element
     mockLink = document.createElement('a')
     mockLink.download = ''
     mockLink.href = ''
     
-    // Mock document.createElement for anchor
     const originalCreateElement = document.createElement
     vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
       if (tagName === 'a') {
@@ -31,7 +27,6 @@ describe('exportService', () => {
       return originalCreateElement.call(document, tagName)
     })
     
-    // Mock link.click
     mockLink.click = vi.fn()
   })
 

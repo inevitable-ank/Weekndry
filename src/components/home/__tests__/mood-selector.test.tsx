@@ -112,7 +112,6 @@ describe('MoodSelector', () => {
     render(<MoodSelector />)
     
     const relaxedCard = screen.getByText('Relaxed').closest('div')
-    // Check that the card exists and has some styling
     expect(relaxedCard).toBeInTheDocument()
     expect(relaxedCard).toHaveClass('text-center')
   })
@@ -122,7 +121,6 @@ describe('MoodSelector', () => {
     
     const relaxedCard = screen.getByText('Relaxed').closest('[role="button"], button, div')
     
-    // Test keyboard interaction
     fireEvent.keyDown(relaxedCard!, { key: 'Enter' })
     fireEvent.keyDown(relaxedCard!, { key: ' ' })
     
@@ -149,7 +147,6 @@ describe('MoodSelector', () => {
   it('should handle edge case of no moods selected', () => {
     render(<MoodSelector />)
     
-    // Initially no button should be shown
     expect(screen.queryByText(/Find Activities for My Vibe/)).not.toBeInTheDocument()
   })
 
@@ -161,7 +158,6 @@ describe('MoodSelector', () => {
     
     rerender(<MoodSelector />)
     
-    // State should be maintained (this would depend on your state management)
     expect(relaxedCard).toBeInTheDocument()
   })
 })

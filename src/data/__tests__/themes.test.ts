@@ -57,10 +57,8 @@ describe('Themes Data', () => {
 
     it('should have emoji previews', () => {
       THEMES.forEach((theme: ThemeConfig) => {
-        // Check that previewEmoji is a string and contains emoji characters
         expect(typeof theme.previewEmoji).toBe('string')
         expect(theme.previewEmoji.length).toBeGreaterThan(0)
-        // More flexible emoji check - just ensure it's not empty
         expect(theme.previewEmoji.trim()).toBeTruthy()
       })
     })
