@@ -61,6 +61,11 @@ export function MealIdeas() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const cardsPerView = 3
 
+  const handleViewRecipes = () => {
+    // Redirect to AllRecipes.com with weekend recipe search
+    window.open('https://www.allrecipes.com/search/results/?search=weekend%20recipes', '_blank');
+  };
+
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => 
       prevIndex + 1 >= meals.length - cardsPerView + 1 ? 0 : prevIndex + 1
@@ -170,7 +175,7 @@ export function MealIdeas() {
         </div>
 
         <div className="text-center mt-8">
-          <Button variant="secondary" size="lg">
+          <Button variant="secondary" size="lg" onClick={handleViewRecipes}>
             View Recipe Collection
           </Button>
         </div>

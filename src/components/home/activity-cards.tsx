@@ -2,6 +2,9 @@ import { Card, CardContent } from "@/components/ui/Card"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
 import { Clock, MapPin, Plus } from "lucide-react"
+import { useNavigate } from "react-router-dom"
+import { useSchedule } from "@/store/scheduleStore"
+import type { Activity } from "@/types/activity"
 import mountainHikers from "@/assets/mountain-hikers (1).png"
 import cookingPasta from "@/assets/cooking-pasta-in-modern-kitchen (1).jpg"
 import movieSetup from "@/assets/cozy-living-room-with-movie-setup (1).jpg"
@@ -9,70 +12,100 @@ import artGallery from "@/assets/modern-art-gallery-with-paintings (1).jpg"
 import beachVolleyball from "@/assets/beach-volleyball-game-with-friends (1).jpg"
 import readingNook from "@/assets/cozy-reading-nook-with-books-and-coffee (1).jpg"
 
-const activities = [
+const activities: (Activity & { image: string; tags: string[] })[] = [
   {
-    id: 1,
-    title: "Morning Hike",
+    id: "home-1",
+    name: "Morning Hike",
     description: "Explore scenic trails and breathe fresh air",
-    duration: "2-3 hours",
+    durationMinutes: 150,
     location: "Outdoor",
-    category: "Adventure",
+    category: "outdoor",
+    icon: "🥾",
+    mood: "energetic",
+    energyLevel: 4,
     image: mountainHikers,
     tags: ["Energetic", "Adventurous"],
   },
   {
-    id: 2,
-    title: "Cooking Class",
+    id: "home-2",
+    name: "Cooking Class",
     description: "Learn to make delicious homemade pasta",
-    duration: "3-4 hours",
+    durationMinutes: 210,
     location: "Kitchen",
-    category: "Creative",
+    category: "food",
+    icon: "🍝",
+    mood: "creative",
+    energyLevel: 3,
     image: cookingPasta,
     tags: ["Creative", "Social"],
   },
   {
-    id: 3,
-    title: "Movie Marathon",
+    id: "home-3",
+    name: "Movie Marathon",
     description: "Cozy up with your favorite film series",
-    duration: "4-6 hours",
+    durationMinutes: 300,
     location: "Home",
-    category: "Relaxation",
+    category: "entertainment",
+    icon: "🎬",
+    mood: "relaxed",
+    energyLevel: 1,
     image: movieSetup,
     tags: ["Relaxed", "Happy"],
   },
   {
-    id: 4,
-    title: "Art Gallery Visit",
+    id: "home-4",
+    name: "Art Gallery Visit",
     description: "Discover local artists and exhibitions",
-    duration: "2-3 hours",
+    durationMinutes: 150,
     location: "Gallery",
-    category: "Culture",
+    category: "entertainment",
+    icon: "🎨",
+    mood: "creative",
+    energyLevel: 2,
     image: artGallery,
     tags: ["Creative", "Social"],
   },
   {
-    id: 5,
-    title: "Beach Volleyball",
+    id: "home-5",
+    name: "Beach Volleyball",
     description: "Play with friends under the sun",
-    duration: "2-3 hours",
+    durationMinutes: 150,
     location: "Beach",
-    category: "Sports",
+    category: "fitness",
+    icon: "🏐",
+    mood: "energetic",
+    energyLevel: 4,
     image: beachVolleyball,
     tags: ["Energetic", "Social"],
   },
   {
-    id: 6,
-    title: "Reading Corner",
+    id: "home-6",
+    name: "Reading Corner",
     description: "Dive into that book you've been meaning to read",
-    duration: "1-2 hours",
+    durationMinutes: 90,
     location: "Home",
-    category: "Relaxation",
+    category: "learning",
+    icon: "📚",
+    mood: "calm",
+    energyLevel: 1,
     image: readingNook,
     tags: ["Relaxed", "Creative"],
   },
 ]
 
 export function ActivityCards() {
+  const navigate = useNavigate();
+  const { addActivity } = useSchedule();
+
+  const handleBrowseAllActivities = () => {
+    navigate('/planner');
+  };
+
+  const handleAddToWeekend = (activity: Activity) => {
+    // Add to Saturday morning by default, user can move it later
+    addActivity(activity, 'Saturday', 'morning');
+  };
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30">
       <div className="mx-auto max-w-7xl">
@@ -89,20 +122,20 @@ export function ActivityCards() {
               <div className="aspect-video relative overflow-hidden">
                 <img
                   src={activity.image || "/placeholder.svg"}
-                  alt={activity.title}
+                  alt={activity.name}
                   className="w-full h-full object-cover"
                 />
-                <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">{activity.category}</Badge>
+                <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground capitalize">{activity.category}</Badge>
               </div>
 
               <CardContent className="p-6">
-                <h3 className="font-semibold text-lg mb-2">{activity.title}</h3>
+                <h3 className="font-semibold text-lg mb-2">{activity.name}</h3>
                 <p className="text-muted-foreground text-sm mb-4">{activity.description}</p>
 
                 <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
                   <div className="flex items-center gap-1">
                     <Clock className="h-3 w-3" />
-                    {activity.duration}
+                    {activity.durationMinutes} min
                   </div>
                   <div className="flex items-center gap-1">
                     <MapPin className="h-3 w-3" />
@@ -118,7 +151,7 @@ export function ActivityCards() {
                   ))}
                 </div>
 
-                <Button className="w-full" size="sm">
+                <Button className="w-full" size="sm" onClick={() => handleAddToWeekend(activity)}>
                   <span className="flex items-center justify-center gap-2">
                     <Plus className="h-4 w-4" />
                     Add to Weekend
@@ -130,7 +163,7 @@ export function ActivityCards() {
         </div>
 
         <div className="text-center mt-12">
-          <Button variant="secondary" size="lg">
+          <Button variant="secondary" size="lg" onClick={handleBrowseAllActivities}>
             Browse All Activities
           </Button>
         </div>
