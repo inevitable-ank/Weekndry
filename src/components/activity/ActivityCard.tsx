@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { Activity } from '../../types';
 import { Card, CardContent, CardTitle, Badge, Button } from '../ui';
-import { geocode } from '../../services/mapsService';
 import { useActivityStore } from '../../store/activityStore';
+import { LocationRecommendations } from './LocationRecommendations';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -13,47 +13,45 @@ const ActivityCardBase: React.FC<ActivityCardProps> = ({ activity, onSelect }) =
   const clickable = Boolean(onSelect);
   const { toggleFavorite, isFavorite } = useActivityStore();
   const fav = isFavorite(activity.id);
-  const onMap = async (e: React.MouseEvent) => {
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  
+  const onMap = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const query = activity.location ?? activity.name;
-    if (!query) return;
-    try {
-      const results = await geocode(query);
-      if (results.length > 0) {
-        const { lat, lon } = results[0];
-        const url = `https://www.openstreetmap.org/#map=15/${lat}/${lon}`;
-        window.open(url, '_blank', 'noopener,noreferrer');
-      } else {
-        const url = `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`;
-        window.open(url, '_blank', 'noopener,noreferrer');
-      }
-    } catch {}
+    setShowLocationModal(true);
   };
   return (
-    <Card 
-      hover 
-      className={`flex items-center gap-4 ${clickable ? 'cursor-pointer' : ''}`}
-      onClick={onSelect ? () => onSelect(activity) : undefined}
-    >
-      <div className="text-3xl" aria-hidden>
-        {activity.icon ?? '⭐'}
-      </div>
-      <CardContent className="flex-1">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base m-0">{activity.name}</CardTitle>
-          <Badge variant="secondary">{activity.category}</Badge>
+    <>
+      <Card 
+        hover 
+        className={`flex items-center gap-4 ${clickable ? 'cursor-pointer' : ''}`}
+        onClick={onSelect ? () => onSelect(activity) : undefined}
+      >
+        <div className="text-3xl" aria-hidden>
+          {activity.icon ?? '⭐'}
         </div>
-        {activity.durationMinutes && (
-          <p className="text-xs text-gray-500 mt-1">{activity.durationMinutes} min • energy {activity.energyLevel ?? 2}/5</p>
-        )}
-        <div className="mt-2 flex justify-end gap-2">
-          <Button size="sm" variant={fav ? 'success' : 'ghost'} onClick={(e) => { e.stopPropagation(); toggleFavorite(activity.id); }} icon={fav ? '⭐' : '☆'}>
-            {fav ? 'Favorited' : 'Favorite'}
-          </Button>
-          <Button size="sm" variant="ghost" onClick={onMap} icon="🗺️">Map</Button>
-        </div>
-      </CardContent>
-    </Card>
+        <CardContent className="flex-1">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base m-0">{activity.name}</CardTitle>
+            <Badge variant="secondary">{activity.category}</Badge>
+          </div>
+          {activity.durationMinutes && (
+            <p className="text-xs text-gray-500 mt-1">{activity.durationMinutes} min • energy {activity.energyLevel ?? 2}/5</p>
+          )}
+          <div className="mt-2 flex justify-end gap-2">
+            <Button size="sm" variant={fav ? 'success' : 'ghost'} onClick={(e) => { e.stopPropagation(); toggleFavorite(activity.id); }} icon={fav ? '⭐' : '☆'}>
+              {fav ? 'Favorited' : 'Favorite'}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={onMap} icon="📍">Find Places</Button>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <LocationRecommendations
+        activity={activity}
+        isOpen={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+      />
+    </>
   );
 };
 

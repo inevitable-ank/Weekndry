@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, Button, LoadingSpinner } from '../ui';
 import { useWeather } from '../../hooks/useWeather';
 import { fetchLocalEvents, type LocalEvent } from '../../services/eventsService';
+import { useUserStore } from '../../store/userStore';
 
 export const DiscoverPanel: React.FC = () => {
   const { weather, loading: weatherLoading, error: weatherError } = useWeather();
+  const { city: defaultCity } = useUserStore();
   const [refreshKey, setRefreshKey] = useState(0);
   const [events, setEvents] = useState<LocalEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
@@ -16,8 +18,8 @@ export const DiscoverPanel: React.FC = () => {
     (async () => {
       setLoadingEvents(true);
       
-      // Use the location from weather data or fallback
-      const city = weather?.location || 'Your city';
+      // Use the location from weather data or fallback to user's default city
+      const city = weather?.location || defaultCity || 'Your city';
       
       // Get coordinates from weather service if available
       const lat = weather?.coordinates?.lat;
@@ -32,15 +34,15 @@ export const DiscoverPanel: React.FC = () => {
       }
     })();
     return () => { active = false; };
-  }, [weather?.location]); // Re-fetch when location changes
+  }, [weather?.location, defaultCity]); // Re-fetch when location or default city changes
 
   // Auto-refresh events every 5 minutes
   useEffect(() => {
     const interval = setInterval(() => {
-      if (weather?.location) {
-        const city = weather.location;
-        const lat = weather.coordinates?.lat;
-        const lon = weather.coordinates?.lon;
+      const city = weather?.location || defaultCity || 'Your city';
+      if (city && city !== 'Your city') {
+        const lat = weather?.coordinates?.lat;
+        const lon = weather?.coordinates?.lon;
         
         fetchLocalEvents(city, lat, lon).then(newEvents => {
           setEvents(newEvents);
@@ -50,7 +52,7 @@ export const DiscoverPanel: React.FC = () => {
     }, 5 * 60 * 1000); // 5 minutes
 
     return () => clearInterval(interval);
-  }, [weather?.location, weather?.coordinates]);
+  }, [weather?.location, weather?.coordinates, defaultCity]);
 
   const suggestion = getSuggestionForWeather(weather?.condition);
 
@@ -113,6 +115,7 @@ export const DiscoverPanel: React.FC = () => {
                     We detect your location automatically. If you see the wrong city, please:
                     <br />• Allow location access in your browser
                     <br />• Check if you're using a VPN
+                    <br />• Set your default city in Settings
                     <br />• Refresh the page to try again
                   </div>
                 </div>
@@ -135,6 +138,11 @@ export const DiscoverPanel: React.FC = () => {
               {events.length === 0 && !loadingEvents && (
                 <div className="text-xs text-gray-400 mt-1">
                   No events found for {weather?.location || 'your location'}
+                </div>
+              )}
+              {weather?.location === defaultCity && defaultCity && defaultCity !== 'Your city' && (
+                <div className="text-xs text-blue-500 mt-1">
+                  📍 Using your default city: {defaultCity}
                 </div>
               )}
             </div>

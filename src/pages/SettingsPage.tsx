@@ -43,19 +43,30 @@ export const SettingsPage: React.FC = () => {
       </div>
       <div className="max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-4" />
       <div>
-        <h3 className="text-lg font-semibold mb-2">Preferences</h3>
-        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-          <label className="text-sm text-gray-700">Default city</label>
-          <input 
-            className="border rounded-lg px-3 py-2 w-full sm:w-auto"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            placeholder="Your city"
-          />
-          <label className="inline-flex items-center gap-2 text-sm text-gray-700">
-            <input type="checkbox" checked={showDiscover} onChange={toggleDiscover} />
-            Show Discover panel
-          </label>
+        <h3 className="text-lg font-semibold mb-2">Location & Preferences</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Default City
+            </label>
+            <div className="space-y-2">
+              <input 
+                className="border rounded-lg px-3 py-2 w-full max-w-md"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Enter your city name (e.g., Mumbai, New York, London)"
+              />
+              <p className="text-xs text-gray-500">
+                This city will be used for weather and events when your location cannot be detected automatically.
+              </p>
+            </div>
+          </div>
+          <div>
+            <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+              <input type="checkbox" checked={showDiscover} onChange={toggleDiscover} />
+              Show Discover panel (weather & events)
+            </label>
+          </div>
         </div>
       </div>
       <div className="max-w-4xl mx-auto h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-4" />

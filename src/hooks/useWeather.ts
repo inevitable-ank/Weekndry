@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useUserStore } from '../store/userStore';
 
 export interface WeatherData {
   tempC: number;
@@ -11,11 +12,12 @@ export interface WeatherData {
   };
 }
 
-// Lightweight weather using free open-meteo.com (no key) with geolocation fallback to a default
+// Lightweight weather using free open-meteo.com (no key) with geolocation fallback to user's default city
 export function useWeather() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { city: defaultCity } = useUserStore();
 
   useEffect(() => {
     let isMounted = true;
@@ -29,6 +31,78 @@ export function useWeather() {
         return data.locality || data.city || data.principalSubdivision || 'Unknown Location';
       } catch {
         return 'Unknown Location';
+      }
+    };
+
+    const getCoordinatesForCity = async (cityName: string): Promise<{ lat: number; lon: number } | null> => {
+      try {
+        // Hardcoded coordinates for major cities (reliable and fast)
+        const majorCities: Record<string, { lat: number; lon: number }> = {
+          'mumbai': { lat: 19.0760, lon: 72.8777 },
+          'delhi': { lat: 28.6139, lon: 77.2090 },
+          'bangalore': { lat: 12.9716, lon: 77.5946 },
+          'hyderabad': { lat: 17.3850, lon: 78.4867 },
+          'chennai': { lat: 13.0827, lon: 80.2707 },
+          'kolkata': { lat: 22.5726, lon: 88.3639 },
+          'pune': { lat: 18.5204, lon: 73.8567 },
+          'ahmedabad': { lat: 23.0225, lon: 72.5714 },
+          'jaipur': { lat: 26.9124, lon: 75.7873 },
+          'surat': { lat: 21.1702, lon: 72.8311 },
+          'lucknow': { lat: 26.8467, lon: 80.9462 },
+          'kanpur': { lat: 26.4499, lon: 80.3319 },
+          'nagpur': { lat: 21.1458, lon: 79.0882 },
+          'indore': { lat: 22.7196, lon: 75.8577 },
+          'thane': { lat: 19.2183, lon: 72.9781 },
+          'bhopal': { lat: 23.2599, lon: 77.4126 },
+          'visakhapatnam': { lat: 17.6868, lon: 83.2185 },
+          'pimpri': { lat: 18.6298, lon: 73.7997 },
+          'patna': { lat: 25.5941, lon: 85.1376 },
+          'vadodara': { lat: 22.3072, lon: 73.1812 },
+          // International cities
+          'new york': { lat: 40.7128, lon: -74.0060 },
+          'london': { lat: 51.5074, lon: -0.1278 },
+          'paris': { lat: 48.8566, lon: 2.3522 },
+          'tokyo': { lat: 35.6762, lon: 139.6503 },
+          'sydney': { lat: -33.8688, lon: 151.2093 },
+          'singapore': { lat: 1.3521, lon: 103.8198 },
+          'dubai': { lat: 25.2048, lon: 55.2708 },
+          'toronto': { lat: 43.6532, lon: -79.3832 },
+          'berlin': { lat: 52.5200, lon: 13.4050 },
+          'madrid': { lat: 40.4168, lon: -3.7038 }
+        };
+        
+        const normalizedCity = cityName.toLowerCase().trim();
+        if (majorCities[normalizedCity]) {
+          return majorCities[normalizedCity];
+        }
+        
+        // Try OpenStreetMap for other cities
+        try {
+          const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}&limit=1`, {
+            headers: {
+              'User-Agent': 'WeekendlyApp/1.0'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+              const result = data[0];
+              if (result.lat && result.lon) {
+                return {
+                  lat: parseFloat(result.lat),
+                  lon: parseFloat(result.lon)
+                };
+              }
+            }
+          }
+        } catch {
+          // Silently fail and return null
+        }
+        
+        return null;
+      } catch {
+        return null;
       }
     };
 
@@ -63,30 +137,12 @@ export function useWeather() {
 
     const getLocation = () => new Promise<GeolocationPosition | null>((resolve) => {
       if (!('geolocation' in navigator)) {
-        console.warn('Geolocation not supported');
         return resolve(null);
       }
       
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          console.info('Geolocation successful:', pos.coords.latitude, pos.coords.longitude);
-          resolve(pos);
-        },
-        (error) => {
-          console.warn('Geolocation error:', error.message);
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              console.warn('User denied location permission');
-              break;
-            case error.POSITION_UNAVAILABLE:
-              console.warn('Location information unavailable');
-              break;
-            case error.TIMEOUT:
-              console.warn('Location request timed out');
-              break;
-          }
-          resolve(null);
-        },
+        (pos) => resolve(pos),
+        () => resolve(null),
         { 
           maximumAge: 300_000, // 5 minutes
           timeout: 15000, // 15 seconds
@@ -98,34 +154,48 @@ export function useWeather() {
     (async () => {
       const pos = await getLocation();
       
-      // Better fallback logic - try to detect if user might be in India
-      let lat = 37.7749; // SF default
-      let lon = -122.4194;
+      let lat: number;
+      let lon: number;
       
       if (!pos) {
-        // Try to detect user's likely location based on timezone or other hints
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        console.info('Geolocation failed, detected timezone:', timezone);
-        
-        // If timezone suggests India, use Delhi coordinates
-        if (timezone.includes('Asia/Kolkata') || timezone.includes('Asia/Calcutta')) {
-          lat = 28.6139; // Delhi
-          lon = 77.2090;
-          console.info('Using Delhi as fallback location');
+        // Geolocation failed, try to use user's default city
+        if (defaultCity && defaultCity !== 'Your city') {
+          const coords = await getCoordinatesForCity(defaultCity);
+          if (coords) {
+            lat = coords.lat;
+            lon = coords.lon;
+          } else {
+            // Fallback to timezone-based detection
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            if (timezone.includes('Asia/Kolkata') || timezone.includes('Asia/Calcutta')) {
+              lat = 28.6139; // Delhi
+              lon = 77.2090;
+            } else {
+              lat = 37.7749; // San Francisco
+              lon = -122.4194;
+            }
+          }
         } else {
-          console.info('Using San Francisco as fallback location');
+          // No default city set, use timezone-based fallback
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          if (timezone.includes('Asia/Kolkata') || timezone.includes('Asia/Calcutta')) {
+            lat = 28.6139; // Delhi
+            lon = 77.2090;
+          } else {
+            lat = 37.7749; // San Francisco
+            lon = -122.4194;
+          }
         }
       } else {
         lat = pos.coords.latitude;
         lon = pos.coords.longitude;
-        console.info('Using detected location:', lat, lon);
       }
       
       await fetchWeather(lat, lon);
     })();
 
     return () => { isMounted = false; };
-  }, []);
+  }, [defaultCity]); // Re-run when default city changes
 
   return { weather, loading, error };
 }
