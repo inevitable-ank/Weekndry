@@ -9,20 +9,48 @@ export const DiscoverPanel: React.FC = () => {
   const [events, setEvents] = useState<LocalEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [showLocationHelp, setShowLocationHelp] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   useEffect(() => {
     let active = true;
     (async () => {
       setLoadingEvents(true);
-      const city = 'Your city';
-      const list = await fetchLocalEvents(city);
+      
+      // Use the location from weather data or fallback
+      const city = weather?.location || 'Your city';
+      
+      // Get coordinates from weather service if available
+      const lat = weather?.coordinates?.lat;
+      const lon = weather?.coordinates?.lon;
+      
+      const list = await fetchLocalEvents(city, lat, lon);
+      
       if (active) {
         setEvents(list);
         setLoadingEvents(false);
+        setLastUpdated(new Date());
       }
     })();
     return () => { active = false; };
-  }, []);
+  }, [weather?.location]); // Re-fetch when location changes
+
+  // Auto-refresh events every 5 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (weather?.location) {
+        const city = weather.location;
+        const lat = weather.coordinates?.lat;
+        const lon = weather.coordinates?.lon;
+        
+        fetchLocalEvents(city, lat, lon).then(newEvents => {
+          setEvents(newEvents);
+          setLastUpdated(new Date());
+        }).catch(console.warn);
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [weather?.location, weather?.coordinates]);
 
   const suggestion = getSuggestionForWeather(weather?.condition);
 
@@ -96,23 +124,81 @@ export const DiscoverPanel: React.FC = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Nearby events (mock)</CardTitle>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>🎉 Nearby Events</CardTitle>
+              {lastUpdated && (
+                <div className="text-xs text-gray-500 mt-1">
+                  Last updated: {lastUpdated.toLocaleTimeString()}
+                </div>
+              )}
+            </div>
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              onClick={() => window.location.reload()}
+              disabled={loadingEvents}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              🔄 Refresh
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
           {loadingEvents ? (
-            <div className="flex items-center gap-2 text-gray-600"><LoadingSpinner size="sm" /> Loading events...</div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <LoadingSpinner size="sm" /> 
+              <span>Loading events...</span>
+            </div>
+          ) : events.length === 0 ? (
+            <div className="text-center py-4 text-gray-500">
+              <div className="text-2xl mb-2">📅</div>
+              <div className="text-sm">No events found for your location</div>
+              <div className="text-xs mt-1">Try refreshing or check back later</div>
+            </div>
           ) : (
-            <ul className="space-y-2">
+            <div className="space-y-3">
               {events.map(ev => (
-                <li key={ev.id} className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">{ev.title}</div>
-                    <div className="text-xs text-gray-500">{ev.date} {ev.location ? `• ${ev.location}` : ''}</div>
+                <div key={ev.id} className="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900 mb-1">{ev.title}</div>
+                      <div className="text-xs text-gray-500 mb-2">
+                        📅 {new Date(ev.date).toLocaleDateString('en-US', { 
+                          weekday: 'short', 
+                          month: 'short', 
+                          day: 'numeric' 
+                        })}
+                        {ev.time && ` • 🕐 ${ev.time}`}
+                        {ev.location && ` • 📍 ${ev.location}`}
+                      </div>
+                      {ev.description && (
+                        <div className="text-xs text-gray-600 mb-2 line-clamp-2">
+                          {ev.description}
+                        </div>
+                      )}
+                      {ev.category && (
+                        <div className="inline-block">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {ev.category}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    {ev.url && (
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => window.open(ev.url, '_blank')}
+                        className="ml-2 text-blue-600 hover:text-blue-800"
+                      >
+                        View →
+                      </Button>
+                    )}
                   </div>
-                  {ev.url && <Button size="sm" variant="ghost" onClick={() => window.open(ev.url, '_blank')}>Open</Button>}
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </CardContent>
       </Card>

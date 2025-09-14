@@ -5,6 +5,10 @@ export interface WeatherData {
   condition: string;
   icon?: string;
   location?: string;
+  coordinates?: {
+    lat: number;
+    lon: number;
+  };
 }
 
 // Lightweight weather using free open-meteo.com (no key) with geolocation fallback to a default
@@ -46,7 +50,8 @@ export function useWeather() {
             tempC, 
             condition, 
             icon: iconForCondition(condition),
-            location 
+            location,
+            coordinates: { lat, lon }
           });
         }
       } catch (e) {
