@@ -9,7 +9,20 @@ export async function fetchCurrentWeather(lat: number, lon: number): Promise<Wea
     const tempC = json?.current?.temperature_2m ?? null;
     const code = json?.current?.weather_code ?? 0;
     const condition = mapWeatherCode(code);
-    return { tempC, condition };
+    
+    // Fetch location name
+    let location = 'Unknown Location';
+    try {
+      const locationRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+      if (locationRes.ok) {
+        const locationData = await locationRes.json();
+        location = locationData.locality || locationData.city || locationData.principalSubdivision || 'Unknown Location';
+      }
+    } catch {
+      // Keep default location if reverse geocoding fails
+    }
+    
+    return { tempC, condition, location };
   } catch {
     return null;
   }
