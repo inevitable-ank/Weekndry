@@ -79,6 +79,28 @@ npm run build
 
 The built files will be in the `dist` directory, ready for deployment.
 
+### Running Tests
+
+```bash
+# Run tests in watch mode (for development)
+npm run test
+
+# Run tests once (for CI/CD)
+npm run test:run
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests with UI interface
+npm run test:ui
+```
+
+The test suite includes:
+- **Unit Tests** - Testing utility functions, hooks, and services
+- **Component Tests** - Testing React components with user interactions
+- **Integration Tests** - Testing complete user flows and app functionality
+- **Store Tests** - Testing state management and data persistence
+
 ## 🛠️ Tech Stack
 
 ### Frontend
@@ -103,6 +125,9 @@ The built files will be in the `dist` directory, ready for deployment.
 - **Prettier** - Code formatting
 - **Husky** - Git hooks for code quality
 - **TypeScript** - Static type checking
+- **Vitest** - Fast unit testing framework
+- **React Testing Library** - Component testing utilities
+- **MSW** - API mocking for tests
 
 ### Additional Features
 - **Drag & Drop** - @dnd-kit for intuitive interactions
@@ -152,6 +177,10 @@ src/
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+- `npm run test` - Run tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:ui` - Run tests with UI interface
+- `npm run test:coverage` - Run tests with coverage report
 
 ## 🌟 Contributing
 
