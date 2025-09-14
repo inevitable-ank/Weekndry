@@ -30,9 +30,13 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({ query, onQueryCh
             removable={selected.includes(cat)}
             onRemove={() => onToggleCategory(cat)}
             className="cursor-pointer"
-            onClick={() => onToggleCategory(cat) as any}
           >
-            {cat}
+            <button 
+              onClick={() => onToggleCategory(cat)}
+              className="w-full h-full text-left"
+            >
+              {cat}
+            </button>
           </Badge>
         ))}
       </div>
