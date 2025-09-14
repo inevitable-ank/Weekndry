@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/Button"
-import { ArrowRight, Calendar, Sparkles } from "lucide-react"
+import { ArrowRight, Sparkles } from "lucide-react"
 import backgroundPattern from "@/assets/abstract-weekend-activities-pattern (2).jpg"
 
 export function Hero() {
@@ -36,12 +36,6 @@ export function Hero() {
               <span className="flex items-center gap-3">
                 Start Planning
                 <ArrowRight className="h-5 w-5" />
-              </span>
-            </Button>
-            <Button variant="secondary" size="lg" className="px-8 py-4 text-base font-medium rounded-lg">
-              <span className="flex items-center gap-3">
-                <Calendar className="h-5 w-5" />
-                View Demo
               </span>
             </Button>
           </div>
