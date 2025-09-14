@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
 import { HomePage } from './pages/HomePage';
 import { PlannerPage } from './pages/PlannerPage';
@@ -9,10 +9,16 @@ import { SchedulePage } from './pages/SchedulePage';
 import { DayViewPage } from './pages/DayViewPage';
 import { CalendarPage } from './pages/CalendarPage';
 
+// Wrapper component to use navigate hook
+const HomePageWrapper: React.FC = () => {
+  const navigate = useNavigate();
+  return <HomePage onStart={() => navigate('/planner')} />;
+};
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout><HomePage onStart={() => window.location.assign('/planner')} /></Layout>,
+    element: <Layout><HomePageWrapper /></Layout>,
   },
   {
     path: '/schedule',

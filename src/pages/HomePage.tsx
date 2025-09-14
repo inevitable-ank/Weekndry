@@ -9,7 +9,7 @@ export const HomePage: React.FC<{ onStart?: () => void }> = ({ onStart }) => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <Hero />
+      <Hero onStart={onStart} />
       
       {/* Mood Selector Section */}
       <div className="relative">

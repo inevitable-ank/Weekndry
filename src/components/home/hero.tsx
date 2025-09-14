@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/Button"
 import { ArrowRight, Sparkles } from "lucide-react"
 import backgroundPattern from "@/assets/abstract-weekend-activities-pattern (2).jpg"
 
-export function Hero() {
+interface HeroProps {
+  onStart?: () => void;
+}
+
+export function Hero({ onStart }: HeroProps) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-background via-card to-muted">
       {/* Background decorative elements */}
@@ -32,7 +36,11 @@ export function Hero() {
 
           {/* CTA buttons */}
           <div className="mt-10 flex items-center justify-center gap-6 flex-wrap">
-            <Button size="lg" className="px-8 py-4 text-base font-semibold rounded-lg">
+            <Button 
+              size="lg" 
+              className="px-8 py-4 text-base font-semibold rounded-lg hover:scale-105 transition-transform duration-200"
+              onClick={onStart || (() => window.location.href = '/planner')}
+            >
               <span className="flex items-center gap-3">
                 Start Planning
                 <ArrowRight className="h-5 w-5" />
