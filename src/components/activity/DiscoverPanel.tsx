@@ -7,7 +7,7 @@ import { useUserStore } from '../../store/userStore';
 export const DiscoverPanel: React.FC = () => {
   const { weather, loading: weatherLoading, error: weatherError } = useWeather();
   const { city: defaultCity } = useUserStore();
-  const [refreshKey, setRefreshKey] = useState(0);
+  // const [refreshKey, setRefreshKey] = useState(0);
   const [events, setEvents] = useState<LocalEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [showLocationHelp, setShowLocationHelp] = useState(false);

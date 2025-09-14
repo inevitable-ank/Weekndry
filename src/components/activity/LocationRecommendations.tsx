@@ -95,7 +95,7 @@ export const LocationRecommendations: React.FC<LocationRecommendationsProps> = (
 
           {!loading && recommendations.length > 0 && (
             <div className="space-y-3">
-              {recommendations.map((rec, index) => (
+              {recommendations.map((rec) => (
                 <Card key={`${rec.lat}-${rec.lon}`} hover className="cursor-pointer" onClick={() => handleLocationClick(rec)}>
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">

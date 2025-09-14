@@ -53,7 +53,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       whileHover={!disabled && !loading ? { scale: 1.05 } : {}}
       whileTap={!disabled && !loading ? { scale: 0.95 } : {}}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
-      {...rest}
+      {...(rest as any)}
     >
       <div className="flex items-center justify-center space-x-2">
         {loading && (

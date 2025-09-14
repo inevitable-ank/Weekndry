@@ -30,12 +30,12 @@ export const Card: React.FC<CardProps> = ({
     outlined: "bg-transparent border-2 border-gray-200 hover:border-gray-300",
   };
   
-  const sizeClasses = {
-    sm: "p-4",
-    md: "p-6",
-    lg: "p-8",
-    xl: "p-10",
-  };
+  // const sizeClasses = {
+  //   sm: "p-4",
+  //   md: "p-6",
+  //   lg: "p-8",
+  //   xl: "p-10",
+  // };
 
   const paddingClasses = {
     none: "p-0",

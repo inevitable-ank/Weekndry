@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, createElement } from 'react';
 import type { Activity } from '../types/activity';
-import { DAYS, TIME_BLOCKS } from '../types/schedule';
+// import { DAYS, TIME_BLOCKS } from '../types/schedule';
 import type { Day, ScheduleData, TimeBlock, ScheduledItem } from '../types/schedule';
 import type { ActivityMood } from '../types/activity';
 

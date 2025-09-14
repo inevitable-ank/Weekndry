@@ -175,7 +175,7 @@ export const CalendarPage: React.FC = () => {
                         'bg-gradient-to-r from-blue-500 to-cyan-500'
                       }`}>
                         {(() => {
-                          const [year, month, day] = holiday.date.split('-').map(Number);
+                          const [, , day] = holiday.date.split('-').map(Number);
                           return day;
                         })()}
                       </div>

@@ -33,7 +33,7 @@ export const Calendar: React.FC<CalendarProps> = ({
 
   const calendarDays = useMemo(() => {
     const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
+    // const lastDay = new Date(year, month + 1, 0);
     const startDate = new Date(firstDay);
     startDate.setDate(startDate.getDate() - firstDay.getDay());
 
@@ -240,7 +240,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                     'bg-gradient-to-r from-blue-500 to-cyan-500'
                   }`}>
                     {(() => {
-                      const [year, month, day] = holiday.date.split('-').map(Number);
+                      const [, , day] = holiday.date.split('-').map(Number);
                       return day;
                     })()}
                   </div>
@@ -248,7 +248,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                     <div className="font-medium text-sm text-gray-800">{holiday.name}</div>
                     <div className="text-xs text-gray-500">
                       {(() => {
-                        const [year, month, day] = holiday.date.split('-').map(Number);
+                        const [, , day] = holiday.date.split('-').map(Number);
                         return `${day} ${MONTHS[month - 1]}`;
                       })()}
                     </div>

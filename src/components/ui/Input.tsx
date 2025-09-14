@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   error?: string;
   helperText?: string;
@@ -61,7 +61,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
           className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${errorClasses} ${iconClasses} ${className}`}
           whileFocus={noFocusScale ? {} : { scale: 1.02 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          {...props}
+          {...(props as any)}
         />
         
         {icon && iconPosition === 'right' && (

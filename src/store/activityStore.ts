@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Activity } from '../types/activity';
+// import type { Activity } from '../types/activity';
 
 interface ActivityState {
   favorites: Record<string, boolean>;
